@@ -9,7 +9,7 @@ import Contact from './pages/Contact';
 function App() {
   return (
     // AGGIUNGI basename="/nome-repo"
-    <Router basename="/arredorama-portfolio">
+    <Router basename="/arredorama_portfolio">
       <Layout>
         <Routes>
           <Route path="/" element={<Home />} />
