@@ -8,7 +8,8 @@ import Contact from './pages/Contact';
 
 function App() {
   return (
-    <Router>
+    // AGGIUNGI basename="/nome-repo"
+    <Router basename="/arredorama-portfolio">
       <Layout>
         <Routes>
           <Route path="/" element={<Home />} />
@@ -20,5 +21,4 @@ function App() {
     </Router>
   );
 }
-
 export default App;
