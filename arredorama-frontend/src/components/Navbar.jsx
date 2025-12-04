@@ -1,28 +1,92 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const Navbar = () => {
+  const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
-  const isHome = location.pathname === '/';
+
+  // Chiudi il menu se cambi pagina
+  useEffect(() => {
+    setIsOpen(false);
+  }, [location]);
+
+  // Blocca lo scroll quando il menu è aperto
+  useEffect(() => {
+    document.body.style.overflow = isOpen ? 'hidden' : 'unset';
+  }, [isOpen]);
+
+  const menuItems = [
+    { title: 'Home', path: '/' },
+    { title: 'About', path: '/about' },
+    { title: 'Projects', path: '/projects' },
+    { title: 'Contact', path: '/contact' }
+  ];
 
   return (
-    <nav className={`fixed top-0 left-0 w-full z-50 py-6 px-10 flex justify-between items-center transition-all duration-300 ${isHome ? 'bg-transparent' : 'bg-[#1a1a1a]/90 backdrop-blur-md'}`}>
-      <Link to="/" className="text-2xl font-thin tracking-tighter text-white uppercase mix-blend-difference">
-        Arredorama
-      </Link>
-      
-      <div className="space-x-8 hidden md:flex">
-        {['About', 'Projects', 'Contact'].map((item) => (
-          <Link 
-            key={item} 
-            to={`/${item.toLowerCase()}`}
-            className="text-white text-xs font-bold uppercase tracking-[0.2em] hover:text-[#ff5149] transition-colors"
+    <>
+      {/* NAVBAR FISSA - mix-blend-difference assicura che si veda SEMPRE */}
+      <nav className="fixed top-0 left-0 w-full z-[100] py-8 px-6 md:px-12 flex justify-between items-center mix-blend-difference text-white">
+        
+        {/* LOGO */}
+        <Link to="/" className="text-3xl md:text-4xl font-bold tracking-tighter uppercase relative z-[100]">
+          Arredorama
+        </Link>
+        
+        {/* HAMBURGER BUTTON (Con testo MENU opzionale se vuoi) */}
+        <div className="flex items-center gap-4 z-[100]">
+          <button 
+            onClick={() => setIsOpen(!isOpen)} 
+            className="group flex flex-col items-end gap-1.5 cursor-pointer p-2"
           >
-            {item}
-          </Link>
-        ))}
-      </div>
-    </nav>
+            <span className={`block h-[2px] bg-white transition-all duration-300 ${isOpen ? 'w-8 rotate-45 translate-y-2.5' : 'w-8'}`}></span>
+            <span className={`block h-[2px] bg-white transition-all duration-300 ${isOpen ? 'w-8 opacity-0' : 'w-6 group-hover:w-8'}`}></span>
+            <span className={`block h-[2px] bg-white transition-all duration-300 ${isOpen ? 'w-8 -rotate-45 -translate-y-2.5' : 'w-4 group-hover:w-8'}`}></span>
+          </button>
+        </div>
+      </nav>
+
+      {/* FULLSCREEN MENU OVERLAY (NERO) */}
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ clipPath: "circle(0% at 100% 0%)" }}
+            animate={{ clipPath: "circle(150% at 100% 0%)" }}
+            exit={{ clipPath: "circle(0% at 100% 0%)" }}
+            transition={{ duration: 0.7, ease: [0.77, 0, 0.175, 1] }} // Animazione fluida custom
+            className="fixed inset-0 bg-[#0a0a0a] text-white z-[90] flex flex-col justify-center px-12 md:px-32"
+          >
+            <div className="flex flex-col gap-2">
+              {menuItems.map((item, index) => (
+                <div key={index} className="overflow-hidden">
+                  <motion.div
+                    initial={{ y: 100, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    exit={{ y: 100, opacity: 0 }}
+                    transition={{ delay: 0.2 + (index * 0.1), duration: 0.5, ease: "easeOut" }}
+                  >
+                    <Link 
+                      to={item.path} 
+                      className="text-5xl md:text-8xl font-thin tracking-tight hover:text-gray-400 transition-colors block"
+                    >
+                      {item.title}
+                    </Link>
+                  </motion.div>
+                </div>
+              ))}
+            </div>
+
+            {/* Footer del menu */}
+            <motion.div 
+               initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.8 }}
+               className="absolute bottom-10 left-12 md:left-32 text-gray-500 text-xs uppercase tracking-widest"
+            >
+               Arredorama Design &copy; 2025
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
   );
 };
 

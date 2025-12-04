@@ -7,7 +7,7 @@ import Contact from './pages/Contact';
 
 function App() {
   return (
-    // AUTOMATICO: Prende il valore 'base' da vite.config.js
+    // Questo prenderà automaticamente '/arredorama_portfolio/' quando sei online
     <Router basename={import.meta.env.BASE_URL}>
       <Layout>
         <Routes>
