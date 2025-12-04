@@ -32,6 +32,7 @@ const Projects = () => {
   const [projects, setProjects] = useState(FALLBACK_PROJECTS);
   const [filtered, setFiltered] = useState(FALLBACK_PROJECTS);
   const [activeCat, setActiveCat] = useState('All');
+  const [selectedId, setSelectedId] = useState(null); // Stato per il progetto selezionato
 
   // Recupera i dati veri se disponibili
   useEffect(() => {
