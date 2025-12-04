@@ -3,19 +3,20 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Layout from './components/Layout';
 import Home from './pages/Home';
 import Projects from './pages/Projects';
+import ProjectDetail from './pages/ProjectDetail';
 import Contact from './pages/Contact';
-import About from './pages/About'; // <--- 1. IMPORTA LA PAGINA
+import About from './pages/About';
 
 function App() {
   return (
-    // Usa basename automatico per gestire sia locale che GitHub Pages
     <Router basename={import.meta.env.BASE_URL}>
       <Layout>
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/about" element={<About />} />
           <Route path="/projects" element={<Projects />} />
+          <Route path="/projects/:id" element={<ProjectDetail />} />
           <Route path="/contact" element={<Contact />} />
-          <Route path="/about" element={<About />} /> {/* <--- 2. AGGIUNGI LA ROTTA */}
         </Routes>
       </Layout>
     </Router>

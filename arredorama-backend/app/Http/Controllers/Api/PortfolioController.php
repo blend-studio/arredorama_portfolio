@@ -13,6 +13,14 @@ class PortfolioController extends Controller
         return response()->json(Project::all());
     }
 
+    public function show($id) {
+        $project = Project::find($id);
+        if (!$project) {
+            return response()->json(['message' => 'Project not found'], 404);
+        }
+        return response()->json($project);
+    }
+
     public function storeContact(Request $request) {
         $data = $request->validate([
             'email' => 'required|email',
