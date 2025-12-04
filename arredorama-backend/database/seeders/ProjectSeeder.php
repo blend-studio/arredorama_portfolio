@@ -14,7 +14,115 @@ class ProjectSeeder extends Seeder
         DB::table('projects')->truncate();
 
         $projects = [
-            // --- LOGIBIOTECH CONTRACT ---
+            // --- PROGETTO RENZI (Living / Cucine) ---
+            [
+                'title' => 'Casa Renzi - Living',
+                'category' => 'Living',
+                'image_url' => '/images/ARREDORAMA_0190_RENZI.jpg',
+                'description' => 'Ampia zona giorno con divano angolare e pareti attrezzate su misura.'
+            ],
+            [
+                'title' => 'Casa Renzi - Dettagli',
+                'category' => 'Living',
+                'image_url' => '/images/ARREDORAMA_0191_RENZI.jpg',
+                'description' => 'Dettagli di design e finiture di pregio per un ambiente sofisticato.'
+            ],
+            [
+                'title' => 'Casa Renzi - Cucina',
+                'category' => 'Cucine',
+                'image_url' => '/images/ARREDORAMA_0195_RENZI.jpg',
+                'description' => 'Cucina moderna con isola centrale e piano in materiali tecnici.'
+            ],
+            [
+                'title' => 'Casa Renzi - Zona Pranzo',
+                'category' => 'Living',
+                'image_url' => '/images/ARREDORAMA_0201_RENZI.jpg',
+                'description' => 'Area pranzo luminosa con tavolo di design e sedute coordinate.'
+            ],
+
+            // --- PROGETTO CAVALIERE (Notte / Bagni) ---
+            [
+                'title' => 'Residenza Cavaliere - Master',
+                'category' => 'Notte',
+                'image_url' => '/images/ARREDORAMA_0210-1-1_CAVALIERE.jpg',
+                'description' => 'Camera padronale con testiera imbottita e illuminazione d\'atmosfera.'
+            ],
+            [
+                'title' => 'Residenza Cavaliere - Armadi',
+                'category' => 'Notte',
+                'image_url' => '/images/ARREDORAMA_0212-1_CAVALIERE.jpg',
+                'description' => 'Armadiature su misura con ante scorrevoli e interni attrezzati.'
+            ],
+            [
+                'title' => 'Residenza Cavaliere - Bagno',
+                'category' => 'Bagni',
+                'image_url' => '/images/ARREDORAMA_0215-1_CAVALIERE.jpg',
+                'description' => 'Bagno moderno con rivestimenti in gres e sanitari sospesi.'
+            ],
+            [
+                'title' => 'Residenza Cavaliere - Dettagli Bagno',
+                'category' => 'Bagni',
+                'image_url' => '/images/ARREDORAMA_0217-1_CAVALIERE.jpg',
+                'description' => 'Rubinetteria di design e specchiera retroilluminata.'
+            ],
+
+            // --- PROGETTO CERONI (Living) ---
+            [
+                'title' => 'Appartamento Ceroni',
+                'category' => 'Living',
+                'image_url' => '/images/ARREDORAMA_CERONI_1.jpg',
+                'description' => 'Living contemporaneo con libreria a tutta altezza.'
+            ],
+            [
+                'title' => 'Ceroni - Zona Relax',
+                'category' => 'Living',
+                'image_url' => '/images/ARREDORAMA_CERONI_3.jpg',
+                'description' => 'Angolo relax con poltrona di design e lampada da terra.'
+            ],
+
+            // --- PROGETTO GHILARDOTTI (Cucine / Living) ---
+            [
+                'title' => 'Villa Ghilardotti - Cucina',
+                'category' => 'Cucine',
+                'image_url' => '/images/ARREDORAMA_GHILARDOTTI_1.jpg',
+                'description' => 'Cucina bianca e legno con penisola snack.'
+            ],
+            [
+                'title' => 'Villa Ghilardotti - Living',
+                'category' => 'Living',
+                'image_url' => '/images/ARREDORAMA_GHILARDOTTI_3.jpg',
+                'description' => 'Open space luminoso con continuità tra cucina e soggiorno.'
+            ],
+
+            // --- PROGETTO MACCHETTI (Notte) ---
+            [
+                'title' => 'Casa Macchetti - Notte',
+                'category' => 'Notte',
+                'image_url' => '/images/ARREDORAMA_MACCHETTI_1.jpg',
+                'description' => 'Camera da letto con colori neutri e tessuti naturali.'
+            ],
+            [
+                'title' => 'Casa Macchetti - Armadio',
+                'category' => 'Notte',
+                'image_url' => '/images/ARREDORAMA_MACCHETTI_3-1.jpg',
+                'description' => 'Cabina armadio passante con illuminazione integrata.'
+            ],
+
+            // --- PROGETTO PIETRA (Bagni / Living) ---
+            [
+                'title' => 'Residenza Pietra - Living',
+                'category' => 'Living',
+                'image_url' => '/images/ARREDORAMA_PIETRA_1.jpg',
+                'description' => 'Soggiorno con parete in pietra e camino.'
+            ],
+            [
+                'title' => 'Residenza Pietra - Bagno',
+                'category' => 'Bagni',
+                'image_url' => '/images/ARREDORAMA_PIETRA_4.jpg',
+                'description' => 'Bagno con rivestimenti materici e vasca.'
+            ],
+
+            // --- LOGIBIOTECH CONTRACT (Mantenuti) ---
             [
                 'title' => 'Logibiotech - Reception',
                 'category' => 'Contract',
@@ -39,31 +147,13 @@ class ProjectSeeder extends Seeder
                 'image_url' => '/images/ARREDORAMA_080.jpg',
                 'description' => 'Ufficio direzionale con arredi su misura e finiture premium.'
             ],
-            [
-                'title' => 'Logibiotech - Area Break',
-                'category' => 'Contract',
-                'image_url' => '/images/ARREDORAMA_084.jpg',
-                'description' => 'Zona relax e break con cucina attrezzata.'
-            ],
-            [
-                'title' => 'Logibiotech - Corridoio',
-                'category' => 'Contract',
-                'image_url' => '/images/ARREDORAMA_088.jpg',
-                'description' => 'Corridoi con illuminazione LED e dettagli architettonici.'
-            ],
 
-            // --- ONESTI GROUP CONTRACT ---
+            // --- ONESTI GROUP CONTRACT (Mantenuti) ---
             [
                 'title' => 'Onesti Group - Hall',
                 'category' => 'Contract',
                 'image_url' => '/images/ARREDORAMA_093.jpg',
                 'description' => 'Hall d\'ingresso con design contemporaneo e materiali pregiati.'
-            ],
-            [
-                'title' => 'Onesti Group - Uffici Operativi',
-                'category' => 'Contract',
-                'image_url' => '/images/ARREDORAMA_095.jpg',
-                'description' => 'Postazioni operative con arredi modulari e storage integrato.'
             ],
             [
                 'title' => 'Onesti Group - Meeting Room',
@@ -83,11 +173,31 @@ class ProjectSeeder extends Seeder
                 'image_url' => '/images/ARREDORAMA_102.jpg',
                 'description' => 'Area lounge per accoglienza clienti e momenti di relax.'
             ],
+
+            // --- ALTRI PROGETTI (Mix) ---
             [
-                'title' => 'Onesti Group - Dettagli',
-                'category' => 'Contract',
-                'image_url' => '/images/ARREDORAMA_103.jpg',
-                'description' => 'Dettagli architettonici e finiture di pregio.'
+                'title' => 'Attico City Life',
+                'category' => 'Living',
+                'image_url' => '/images/ARREDORAMA_0104.jpg',
+                'description' => 'Attico con vista sulla città e arredi di design.'
+            ],
+            [
+                'title' => 'Villa nel Parco',
+                'category' => 'Cucine',
+                'image_url' => '/images/ARREDORAMA_0108.jpg',
+                'description' => 'Cucina affacciata sul parco privato.'
+            ],
+            [
+                'title' => 'Loft Centro Storico',
+                'category' => 'Living',
+                'image_url' => '/images/ARREDORAMA_0120.jpg',
+                'description' => 'Recupero di un edificio storico con interni moderni.'
+            ],
+            [
+                'title' => 'Residenza Lago',
+                'category' => 'Notte',
+                'image_url' => '/images/ARREDORAMA_0138.jpg',
+                'description' => 'Camera da letto con vista lago.'
             ],
 
             // --- CUCINE (da Piano Editoriale) ---
