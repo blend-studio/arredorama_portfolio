@@ -14,146 +14,184 @@ class ProjectSeeder extends Seeder
         DB::table('projects')->truncate();
 
         $projects = [
-            // --- CUCINE ---
+            // --- LOGIBIOTECH CONTRACT ---
             [
-                'title' => 'Residenza Lago',
-                'category' => 'Cucine',
-                'image_url' => 'https://images.unsplash.com/photo-1556911220-e15b29be8c8f?q=80&w=2070&auto=format&fit=crop',
-                'description' => 'Cucina con isola centrale in finitura materica scura.'
+                'title' => 'Logibiotech - Reception',
+                'category' => 'Contract',
+                'image_url' => '/images/ARREDORAMA_072.jpg',
+                'description' => 'Area reception con bancone personalizzato e illuminazione integrata.'
             ],
             [
-                'title' => 'Penthouse Milano',
-                'category' => 'Cucine',
-                'image_url' => 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?q=80&w=2053&auto=format&fit=crop',
-                'description' => 'Cucina bianca minimalista con dettagli in legno rovere.'
+                'title' => 'Logibiotech - Open Space',
+                'category' => 'Contract',
+                'image_url' => '/images/ARREDORAMA_074.jpg',
+                'description' => 'Spazio operativo open space con postazioni ergonomiche.'
             ],
             [
-                'title' => 'Villa Luce',
-                'category' => 'Cucine',
-                'image_url' => 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=2070&auto=format&fit=crop',
-                'description' => 'Ampia cucina open space affacciata sul giardino.'
+                'title' => 'Logibiotech - Sala Riunioni',
+                'category' => 'Contract',
+                'image_url' => '/images/ARREDORAMA_078.jpg',
+                'description' => 'Sala meeting con tavolo direzionale e sedute executive.'
             ],
             [
-                'title' => 'Cucina Monolite', 
-                'category' => 'Cucine', 
-                'image_url' => 'https://images.unsplash.com/photo-1556911220-e15b29be8c8f?q=80&w=2070&auto=format&fit=crop',
-                'description' => 'Blocco unico in pietra naturale con tecnologia integrata a scomparsa.'
+                'title' => 'Logibiotech - Ufficio Direzionale',
+                'category' => 'Contract',
+                'image_url' => '/images/ARREDORAMA_080.jpg',
+                'description' => 'Ufficio direzionale con arredi su misura e finiture premium.'
             ],
             [
-                'title' => 'Isola White', 
-                'category' => 'Cucine', 
-                'image_url' => 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?q=80&w=2053&auto=format&fit=crop',
-                'description' => 'Isola centrale in laccato bianco puro con piano snack in rovere.'
+                'title' => 'Logibiotech - Area Break',
+                'category' => 'Contract',
+                'image_url' => '/images/ARREDORAMA_084.jpg',
+                'description' => 'Zona relax e break con cucina attrezzata.'
             ],
             [
-                'title' => 'Material Dark', 
-                'category' => 'Cucine', 
-                'image_url' => 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=2070&auto=format&fit=crop',
-                'description' => 'Finiture scure opache e metallo brunito per un ambiente sofisticato.'
-            ],
-
-            // --- LIVING ---
-            [
-                'title' => 'Loft Industriale',
-                'category' => 'Living',
-                'image_url' => 'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?q=80&w=1974&auto=format&fit=crop',
-                'description' => 'Zona giorno con divano modulare in tessuto grigio.'
-            ],
-            [
-                'title' => 'Casa Armonia',
-                'category' => 'Living',
-                'image_url' => 'https://images.unsplash.com/photo-1616486338812-3dadae4b4f9d?q=80&w=2070&auto=format&fit=crop',
-                'description' => 'Libreria a parete e poltrone di design iconico.'
-            ],
-            [
-                'title' => 'Attico Centro',
-                'category' => 'Living',
-                'image_url' => 'https://images.unsplash.com/photo-1567225557594-88d73e55f2cb?q=80&w=1974&auto=format&fit=crop',
-                'description' => 'Ambiente living dai toni caldi e accoglienti.'
-            ],
-            [
-                'title' => 'Living Sospeso', 
-                'category' => 'Living', 
-                'image_url' => 'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?q=80&w=1974&auto=format&fit=crop',
-                'description' => 'Composizione a parete con moduli sospesi e retroilluminazione LED.'
-            ],
-            [
-                'title' => 'Libreria Infinity', 
-                'category' => 'Living', 
-                'image_url' => 'https://images.unsplash.com/photo-1616486338812-3dadae4b4f9d?q=80&w=2070&auto=format&fit=crop',
-                'description' => 'Sistema modulare a tutta altezza con divisori in metallo sottile.'
-            ],
-            [
-                'title' => 'Open Space Wood', 
-                'category' => 'Living', 
-                'image_url' => 'https://images.unsplash.com/photo-1567225557594-88d73e55f2cb?q=80&w=1974&auto=format&fit=crop',
-                'description' => 'Continuità fluida tra cucina e soggiorno con boiserie in noce.'
+                'title' => 'Logibiotech - Corridoio',
+                'category' => 'Contract',
+                'image_url' => '/images/ARREDORAMA_088.jpg',
+                'description' => 'Corridoi con illuminazione LED e dettagli architettonici.'
             ],
 
-            // --- ZONA NOTTE ---
+            // --- ONESTI GROUP CONTRACT ---
             [
-                'title' => 'Suite Padronale',
+                'title' => 'Onesti Group - Hall',
+                'category' => 'Contract',
+                'image_url' => '/images/ARREDORAMA_093.jpg',
+                'description' => 'Hall d\'ingresso con design contemporaneo e materiali pregiati.'
+            ],
+            [
+                'title' => 'Onesti Group - Uffici Operativi',
+                'category' => 'Contract',
+                'image_url' => '/images/ARREDORAMA_095.jpg',
+                'description' => 'Postazioni operative con arredi modulari e storage integrato.'
+            ],
+            [
+                'title' => 'Onesti Group - Meeting Room',
+                'category' => 'Contract',
+                'image_url' => '/images/ARREDORAMA_098.jpg',
+                'description' => 'Sala riunioni con tecnologia AV integrata.'
+            ],
+            [
+                'title' => 'Onesti Group - Executive',
+                'category' => 'Contract',
+                'image_url' => '/images/ARREDORAMA_100.jpg',
+                'description' => 'Ufficio executive con finiture eleganti e vista panoramica.'
+            ],
+            [
+                'title' => 'Onesti Group - Lounge',
+                'category' => 'Contract',
+                'image_url' => '/images/ARREDORAMA_102.jpg',
+                'description' => 'Area lounge per accoglienza clienti e momenti di relax.'
+            ],
+            [
+                'title' => 'Onesti Group - Dettagli',
+                'category' => 'Contract',
+                'image_url' => '/images/ARREDORAMA_103.jpg',
+                'description' => 'Dettagli architettonici e finiture di pregio.'
+            ],
+
+            // --- CUCINE (da Piano Editoriale) ---
+            [
+                'title' => 'Cucina Design Moderno',
+                'category' => 'Cucine',
+                'image_url' => '/images/Settimana-21---Post-1.jpg',
+                'description' => 'Cucina con isola centrale e finiture contemporanee.'
+            ],
+            [
+                'title' => 'Cucina Minimal White',
+                'category' => 'Cucine',
+                'image_url' => '/images/Settimana-22---Post-1-.jpg',
+                'description' => 'Cucina bianca minimalista con dettagli in legno.'
+            ],
+            [
+                'title' => 'Cucina Industrial',
+                'category' => 'Cucine',
+                'image_url' => '/images/Settimana-23---Post-1-.jpg',
+                'description' => 'Cucina con elementi industrial e acciaio a vista.'
+            ],
+            [
+                'title' => 'Cucina Open Space',
+                'category' => 'Cucine',
+                'image_url' => '/images/Settimana-24---Post-1.jpg',
+                'description' => 'Cucina aperta sul living con penisola conviviale.'
+            ],
+
+            // --- LIVING (da Piano Editoriale) ---
+            [
+                'title' => 'Living Contemporaneo',
+                'category' => 'Living',
+                'image_url' => '/images/Settimana-25---Post-1.jpg',
+                'description' => 'Zona giorno con divano modulare e libreria a parete.'
+            ],
+            [
+                'title' => 'Soggiorno Elegante',
+                'category' => 'Living',
+                'image_url' => '/images/Settimana-26---Post-1.jpg',
+                'description' => 'Soggiorno con arredi di design e illuminazione scenografica.'
+            ],
+            [
+                'title' => 'Living Minimal',
+                'category' => 'Living',
+                'image_url' => '/images/Settimana-27---Post-1.jpg',
+                'description' => 'Ambiente living essenziale con linee pulite.'
+            ],
+            [
+                'title' => 'Open Space Living',
+                'category' => 'Living',
+                'image_url' => '/images/Settimana-28---Post-1.jpg',
+                'description' => 'Spazio aperto con zona conversazione e area TV.'
+            ],
+
+            // --- ZONA NOTTE (da Piano Editoriale) ---
+            [
+                'title' => 'Camera Padronale',
                 'category' => 'Notte',
-                'image_url' => 'https://images.unsplash.com/photo-1616594039964-40891a909d72?q=80&w=2066&auto=format&fit=crop',
-                'description' => 'Camera da letto con cabina armadio a vista.'
+                'image_url' => '/images/Settimana-29---Post-1.jpg',
+                'description' => 'Camera da letto con testiera imbottita e armadio a muro.'
+            ],
+            [
+                'title' => 'Suite Moderna',
+                'category' => 'Notte',
+                'image_url' => '/images/Settimana-30---Post-1.jpg',
+                'description' => 'Suite con cabina armadio integrata e zona relax.'
             ],
             [
                 'title' => 'Camera Zen',
                 'category' => 'Notte',
-                'image_url' => 'https://images.unsplash.com/photo-1595526114035-0d45ed16cfbf?q=80&w=2070&auto=format&fit=crop',
-                'description' => 'Letto matrimoniale sospeso e palette colori neutra.'
+                'image_url' => '/images/Settimana-32---Post-1.jpg',
+                'description' => 'Camera dallo stile orientale con palette neutra.'
             ],
             [
-                'title' => 'Suite Hotel Style', 
-                'category' => 'Notte', 
-                'image_url' => 'https://images.unsplash.com/photo-1616594039964-40891a909d72?q=80&w=2066&auto=format&fit=crop',
-                'description' => 'Arredi su misura e tessuti pregiati per un comfort assoluto.'
-            ],
-            [
-                'title' => 'Cabina Armadio Glass', 
-                'category' => 'Notte', 
-                'image_url' => 'https://images.unsplash.com/photo-1595526114035-0d45ed16cfbf?q=80&w=2070&auto=format&fit=crop',
-                'description' => 'Armadiature con ante in vetro fumé e profili bronzo.'
+                'title' => 'Notte Elegante',
+                'category' => 'Notte',
+                'image_url' => '/images/Settimana-33---Post-1.jpg',
+                'description' => 'Camera con finiture pregiate e illuminazione soffusa.'
             ],
 
-            // --- BAGNI ---
+            // --- BAGNI (da Piano Editoriale) ---
             [
-                'title' => 'Spa Privata',
+                'title' => 'Bagno Spa',
                 'category' => 'Bagni',
-                'image_url' => 'https://images.unsplash.com/photo-1600566752355-35792bedcfe1?q=80&w=2070&auto=format&fit=crop',
-                'description' => 'Bagno moderno con rivestimenti in marmo e vasca free-standing.'
+                'image_url' => '/images/Settimana-34---Post-1.jpg',
+                'description' => 'Bagno con vasca freestanding e rivestimenti in marmo.'
+            ],
+            [
+                'title' => 'Bagno Moderno',
+                'category' => 'Bagni',
+                'image_url' => '/images/Settimana-35---Post-2.jpg',
+                'description' => 'Bagno con doccia walk-in e mobile sospeso.'
             ],
             [
                 'title' => 'Bagno Stone',
                 'category' => 'Bagni',
-                'image_url' => 'https://images.unsplash.com/photo-1552321988-30f0ef336215?q=80&w=2070&auto=format&fit=crop',
-                'description' => 'Ambiente bagno con texture pietra e illuminazione led.'
+                'image_url' => '/images/Settimana-36---Post-1.jpg',
+                'description' => 'Bagno con rivestimenti effetto pietra naturale.'
             ],
             [
-                'title' => 'Bagno Marmo', 
-                'category' => 'Bagni', 
-                'image_url' => 'https://images.unsplash.com/photo-1600566752355-35792bedcfe1?q=80&w=2070&auto=format&fit=crop',
-                'description' => 'Eleganza senza tempo con marmi pregiati e rubinetteria nera.'
-            ],
-            [
-                'title' => 'Doccia Walk-in', 
-                'category' => 'Bagni', 
-                'image_url' => 'https://images.unsplash.com/photo-1552321988-30f0ef336215?q=80&w=2070&auto=format&fit=crop',
-                'description' => 'Ampia zona doccia con cristallo trasparente e soffione a pioggia.'
-            ],
-
-            // --- UFFICIO / CONTRACT ---
-            [
-                'title' => 'Sala Riunioni Executive', 
-                'category' => 'Contract', 
-                'image_url' => 'https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=2069&auto=format&fit=crop',
-                'description' => 'Tavolo riunioni direzionale con cablaggio integrato e sedute ergonomiche.'
-            ],
-            [
-                'title' => 'Lobby Minimal', 
-                'category' => 'Contract', 
-                'image_url' => 'https://images.unsplash.com/photo-1497366811353-6870744d04b2?q=80&w=2069&auto=format&fit=crop',
-                'description' => 'Area accoglienza con bancone scultoreo e sedute d\'attesa di design.'
+                'title' => 'Bagno Luxury',
+                'category' => 'Bagni',
+                'image_url' => '/images/Settimana-41---Post-1.jpg',
+                'description' => 'Bagno di lusso con doppio lavabo e specchiera retroilluminata.'
             ],
         ];
 

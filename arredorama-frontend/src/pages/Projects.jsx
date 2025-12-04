@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import axios from 'axios';
 
+// URL base del backend
+const API_BASE_URL = 'http://127.0.0.1:8000';
+
 // Fallback se il backend non è acceso
 const FALLBACK_PROJECTS = [
     { id: 1, title: 'Cucina Monolite', category: 'Cucine', image_url: 'https://images.unsplash.com/photo-1556911220-e15b29be8c8f?q=80&w=2070' },
@@ -12,6 +15,17 @@ const FALLBACK_PROJECTS = [
     { id: 6, title: 'Isola White', category: 'Cucine', image_url: 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?q=80&w=2053' },
 ];
 
+// Funzione per ottenere l'URL completo dell'immagine
+const getImageUrl = (imageUrl) => {
+  if (!imageUrl) return '';
+  // Se è già un URL completo (http/https), restituiscilo così com'è
+  if (imageUrl.startsWith('http://') || imageUrl.startsWith('https://')) {
+    return imageUrl;
+  }
+  // Altrimenti, aggiungi l'URL base del backend
+  return `${API_BASE_URL}${imageUrl}`;
+};
+
 const Projects = () => {
   const [projects, setProjects] = useState(FALLBACK_PROJECTS);
   const [filtered, setFiltered] = useState(FALLBACK_PROJECTS);
@@ -19,7 +33,7 @@ const Projects = () => {
 
   // Recupera i dati veri se disponibili
   useEffect(() => {
-    axios.get('http://127.0.0.1:8000/api/projects')
+    axios.get(`${API_BASE_URL}/api/projects`)
       .then(res => {
          if(res.data.length > 0) {
             setProjects(res.data);
@@ -87,7 +101,7 @@ const Projects = () => {
             >
               <div className="overflow-hidden relative w-full aspect-[3/4] bg-gray-100">
                 <img 
-                   src={p.image_url} 
+                   src={getImageUrl(p.image_url)} 
                    alt={p.title}
                    className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-1000 ease-out" 
                 />

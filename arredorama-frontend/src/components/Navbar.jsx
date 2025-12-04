@@ -29,8 +29,12 @@ const Navbar = () => {
       <nav className="fixed top-0 left-0 w-full z-[100] py-8 px-6 md:px-12 flex justify-between items-center mix-blend-difference text-white">
         
         {/* LOGO */}
-        <Link to="/" className="text-3xl md:text-4xl font-bold tracking-tighter uppercase relative z-[100]">
-          Arredorama
+        <Link to="/" className="relative z-[100]">
+          <img 
+            src="https://www.arredorama.it/wp-content/uploads/2019/02/logo-arredorama.png" 
+            alt="Arredorama" 
+            className="h-8 md:h-10 w-auto object-contain brightness-0 invert" 
+          />
         </Link>
         
         {/* HAMBURGER BUTTON (Con testo MENU opzionale se vuoi) */}
