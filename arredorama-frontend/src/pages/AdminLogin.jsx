@@ -3,6 +3,19 @@ import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 
 const API_BASE_URL = 'http://127.0.0.1:8000';
+const USE_STATIC_DATA = import.meta.env.VITE_USE_STATIC_DATA === 'true';
+const BASE_URL = (import.meta.env.BASE_URL || '/').replace(/\/$/, '');
+const STATIC_AUTH_URL = `${BASE_URL}/admin-auth.json`;
+
+let staticAdminsCache = null;
+const loadStaticAdmins = async () => {
+  if (staticAdminsCache) return staticAdminsCache;
+  const response = await fetch(STATIC_AUTH_URL);
+  const data = await response.json();
+  const admins = Array.isArray(data) ? data : Array.isArray(data.admins) ? data.admins : [data];
+  staticAdminsCache = admins.filter(Boolean);
+  return staticAdminsCache;
+};
 
 const AdminLogin = () => {
   const navigate = useNavigate();
@@ -26,24 +39,41 @@ const AdminLogin = () => {
     setLoading(true);
 
     try {
-      const response = await fetch(`${API_BASE_URL}/api/admin/login`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
+      if (USE_STATIC_DATA) {
+        const admins = await loadStaticAdmins();
+        const match = admins.find(
+          (a) => a.email === formData.email && a.password === formData.password,
+        );
 
-      const data = await response.json();
+        if (!match) {
+          throw new Error('Credenziali non valide');
+        }
 
-      if (!response.ok) {
-        throw new Error(data.message || 'Credenziali non valide');
+        localStorage.setItem('adminToken', 'static-auth');
+        localStorage.setItem(
+          'adminUser',
+          JSON.stringify({ email: match.email, name: match.name || 'Admin' })
+        );
+      } else {
+        const response = await fetch(`${API_BASE_URL}/api/admin/login`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+          },
+          body: JSON.stringify(formData),
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.message || 'Credenziali non valide');
+        }
+
+        // Salva il token nel localStorage
+        localStorage.setItem('adminToken', data.token);
+        localStorage.setItem('adminUser', JSON.stringify(data.admin));
       }
-
-      // Salva il token nel localStorage
-      localStorage.setItem('adminToken', data.token);
-      localStorage.setItem('adminUser', JSON.stringify(data.admin));
 
       // Reindirizza alla dashboard
       navigate('/admin/dashboard');

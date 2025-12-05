@@ -119,6 +119,13 @@ const AdminDashboard = () => {
   };
 
   const handleLogout = async () => {
+    if (USE_STATIC_DATA) {
+      localStorage.removeItem('adminToken');
+      localStorage.removeItem('adminUser');
+      navigate('/admin');
+      return;
+    }
+
     try {
       await fetch(`${API_BASE_URL}/api/admin/logout`, {
         method: 'POST',
@@ -229,6 +236,11 @@ const AdminDashboard = () => {
     setSaving(true);
 
     try {
+      if (USE_STATIC_DATA) {
+        alert('Modalità sola lettura su GitHub Pages: modifica/disponibile solo in ambiente backend.');
+        return;
+      }
+
       const form = new FormData();
       form.append('title', formData.title);
       form.append('category', formData.category);
@@ -268,6 +280,11 @@ const AdminDashboard = () => {
   };
 
   const handleDelete = async (id) => {
+    if (USE_STATIC_DATA) {
+      alert('Modalità sola lettura su GitHub Pages: eliminazione disponibile solo in ambiente backend.');
+      return;
+    }
+
     try {
       const response = await fetch(`${API_BASE_URL}/api/admin/projects/${id}`, {
         method: 'DELETE',
