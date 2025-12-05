@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Project;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
 
 class AdminProjectController extends Controller
 {
@@ -17,30 +19,82 @@ class AdminProjectController extends Controller
 
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'category' => 'required|string|max:100',
-            'description' => 'nullable|string',
-            'client' => 'nullable|string|max:255',
-            'location' => 'nullable|string|max:255',
-            'year' => 'nullable|string|max:10',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:5120',
+        Log::info('[ADMIN][PROJECT][STORE] request received', [
+            'ip' => $request->ip(),
+            'user_agent' => $request->userAgent(),
+            'payload' => $request->except(['image']),
         ]);
 
-        // Gestione upload immagine
-        if ($request->hasFile('image')) {
-            $file = $request->file('image');
-            $filename = time() . '_' . $file->getClientOriginalName();
-            $file->move(public_path('images'), $filename);
-            $validated['image'] = '/images/' . $filename;
+        try {
+            $rules = [
+                'title' => 'required|string|max:255',
+                'category' => 'required|string|max:100',
+                'description' => 'nullable|string',
+                'client' => 'nullable|string|max:255',
+                'location' => 'nullable|string|max:255',
+                'year' => 'nullable|string|max:10',
+                // l'immagine può essere file o stringa (già presente): valida solo se è un file caricato
+                'image' => 'nullable',
+            ];
+
+            if ($request->hasFile('image')) {
+                // Evita blocchi su mime detection (alcuni client inviano mime atipici). Accetta qualunque file fino a 5MB.
+                $rules['image'] = 'file|max:5120';
+                $file = $request->file('image');
+                Log::info('[ADMIN][PROJECT][STORE] image upload detected', [
+                    'original_name' => $file ? $file->getClientOriginalName() : null,
+                    'mime' => $file ? $file->getMimeType() : null,
+                    'size' => $file ? $file->getSize() : null,
+                ]);
+            }
+
+            $validated = $request->validate($rules);
+
+            if ($request->hasFile('image')) {
+                $file = $request->file('image');
+                $filename = time() . '_' . $file->getClientOriginalName();
+
+                // Backend: salva in public/images
+                $targetDir = public_path('images');
+                File::ensureDirectoryExists($targetDir);
+                $file->move($targetDir, $filename);
+
+                // Copia anche nel frontend per la modalità statica
+                $frontendDir = base_path('../arredorama-frontend/src/assets/images/ARREDORAMA-SMALL');
+                File::ensureDirectoryExists($frontendDir);
+                $backendPath = $targetDir . DIRECTORY_SEPARATOR . $filename;
+                $frontendPath = $frontendDir . DIRECTORY_SEPARATOR . $filename;
+                if (file_exists($backendPath)) {
+                    @copy($backendPath, $frontendPath);
+                }
+
+                // Percorso salvato in DB
+                $validated['image'] = '/images/' . $filename;
+            }
+
+            // Copia il path anche su image_url (colonna esistente non nullable)
+            $validated['image_url'] = $validated['image'] ?? '';
+
+            $project = Project::create($validated);
+
+            Log::info('[ADMIN][PROJECT][STORE] success', ['project_id' => $project->id]);
+
+            return response()->json([
+                'message' => 'Progetto creato con successo',
+                'project' => $project,
+            ], 201);
+        } catch (\Throwable $e) {
+            Log::error('[ADMIN][PROJECT][STORE] error', [
+                'message' => $e->getMessage(),
+                'line' => $e->getLine(),
+                'file' => $e->getFile(),
+                'trace' => $e->getTraceAsString(),
+            ]);
+
+            return response()->json([
+                'message' => 'Errore nel salvataggio del progetto',
+            ], 500);
         }
-
-        $project = Project::create($validated);
-
-        return response()->json([
-            'message' => 'Progetto creato con successo',
-            'project' => $project,
-        ], 201);
     }
 
     public function show($id)
@@ -62,38 +116,93 @@ class AdminProjectController extends Controller
             return response()->json(['message' => 'Progetto non trovato'], 404);
         }
 
-        $validated = $request->validate([
-            'title' => 'sometimes|required|string|max:255',
-            'category' => 'sometimes|required|string|max:100',
-            'description' => 'nullable|string',
-            'client' => 'nullable|string|max:255',
-            'location' => 'nullable|string|max:255',
-            'year' => 'nullable|string|max:10',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:5120',
+        Log::info('[ADMIN][PROJECT][UPDATE] request received', [
+            'project_id' => $id,
+            'ip' => $request->ip(),
+            'payload' => $request->except(['image']),
         ]);
 
-        // Gestione upload nuova immagine
-        if ($request->hasFile('image')) {
-            // Elimina la vecchia immagine se esiste
-            if ($project->image) {
-                $oldImagePath = public_path($project->image);
-                if (file_exists($oldImagePath)) {
-                    unlink($oldImagePath);
-                }
+        try {
+            $rules = [
+                'title' => 'sometimes|required|string|max:255',
+                'category' => 'sometimes|required|string|max:100',
+                'description' => 'nullable|string',
+                'client' => 'nullable|string|max:255',
+                'location' => 'nullable|string|max:255',
+                'year' => 'nullable|string|max:10',
+                'image' => 'nullable',
+            ];
+
+            if ($request->hasFile('image')) {
+                // Accetta il file senza controllare il mime per evitare falsi negativi
+                $rules['image'] = 'file|max:5120';
+                $file = $request->file('image');
+                Log::info('[ADMIN][PROJECT][UPDATE] image upload detected', [
+                    'original_name' => $file ? $file->getClientOriginalName() : null,
+                    'mime' => $file ? $file->getMimeType() : null,
+                    'size' => $file ? $file->getSize() : null,
+                ]);
             }
 
-            $file = $request->file('image');
-            $filename = time() . '_' . $file->getClientOriginalName();
-            $file->move(public_path('images'), $filename);
-            $validated['image'] = '/images/' . $filename;
+            $validated = $request->validate($rules);
+
+            if ($request->hasFile('image')) {
+                if ($project->image) {
+                    $oldAbsolute = public_path(ltrim($project->image, '/'));
+                    if (file_exists($oldAbsolute)) {
+                        @unlink($oldAbsolute);
+                    }
+                }
+
+                $file = $request->file('image');
+                $filename = time() . '_' . $file->getClientOriginalName();
+
+                // Backend: salva in public/images
+                $targetDir = public_path('images');
+                File::ensureDirectoryExists($targetDir);
+                $file->move($targetDir, $filename);
+
+                // Copia anche nel frontend per la modalità statica
+                $frontendDir = base_path('../arredorama-frontend/src/assets/images/ARREDORAMA-SMALL');
+                File::ensureDirectoryExists($frontendDir);
+                $backendPath = $targetDir . DIRECTORY_SEPARATOR . $filename;
+                $frontendPath = $frontendDir . DIRECTORY_SEPARATOR . $filename;
+                if (file_exists($backendPath)) {
+                    @copy($backendPath, $frontendPath);
+                }
+
+                $validated['image'] = '/images/' . $filename;
+            }
+
+            // Mantieni image_url allineato (colonna esistente non nullable)
+            if ($request->hasFile('image')) {
+                $validated['image_url'] = $validated['image'];
+            } elseif (!isset($validated['image_url'])) {
+                // Se non si carica nuova immagine, conserva quella esistente
+                $validated['image_url'] = $project->image_url ?? ($project->image ?? '');
+            }
+
+            $project->update($validated);
+
+            Log::info('[ADMIN][PROJECT][UPDATE] success', ['project_id' => $project->id]);
+
+            return response()->json([
+                'message' => 'Progetto aggiornato con successo',
+                'project' => $project,
+            ]);
+        } catch (\Throwable $e) {
+            Log::error('[ADMIN][PROJECT][UPDATE] error', [
+                'project_id' => $id,
+                'message' => $e->getMessage(),
+                'line' => $e->getLine(),
+                'file' => $e->getFile(),
+                'trace' => $e->getTraceAsString(),
+            ]);
+
+            return response()->json([
+                'message' => 'Errore nell\'aggiornamento del progetto',
+            ], 500);
         }
-
-        $project->update($validated);
-
-        return response()->json([
-            'message' => 'Progetto aggiornato con successo',
-            'project' => $project,
-        ]);
     }
 
     public function destroy($id)
@@ -104,18 +213,37 @@ class AdminProjectController extends Controller
             return response()->json(['message' => 'Progetto non trovato'], 404);
         }
 
-        // Elimina l'immagine associata
-        if ($project->image) {
-            $imagePath = public_path($project->image);
-            if (file_exists($imagePath)) {
-                unlink($imagePath);
-            }
-        }
-
-        $project->delete();
-
-        return response()->json([
-            'message' => 'Progetto eliminato con successo',
+        Log::info('[ADMIN][PROJECT][DELETE] request received', [
+            'project_id' => $id,
         ]);
+
+        try {
+            if ($project->image) {
+                $oldAbsolute = public_path(ltrim($project->image, '/'));
+                if (file_exists($oldAbsolute)) {
+                    @unlink($oldAbsolute);
+                }
+            }
+
+            $project->delete();
+
+            Log::info('[ADMIN][PROJECT][DELETE] success', ['project_id' => $id]);
+
+            return response()->json([
+                'message' => 'Progetto eliminato con successo',
+            ]);
+        } catch (\Throwable $e) {
+            Log::error('[ADMIN][PROJECT][DELETE] error', [
+                'project_id' => $id,
+                'message' => $e->getMessage(),
+                'line' => $e->getLine(),
+                'file' => $e->getFile(),
+                'trace' => $e->getTraceAsString(),
+            ]);
+
+            return response()->json([
+                'message' => 'Errore nell\'eliminazione del progetto',
+            ], 500);
+        }
     }
 }

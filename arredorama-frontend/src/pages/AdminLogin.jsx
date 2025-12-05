@@ -5,8 +5,8 @@ import { motion } from 'framer-motion';
 const API_BASE_URL = 'http://127.0.0.1:8000';
 const USE_STATIC_DATA = import.meta.env.VITE_USE_STATIC_DATA === 'true';
 const BASE_URL = (import.meta.env.BASE_URL || '/').replace(/\/$/, '');
-const IS_STATIC_MODE =
-  USE_STATIC_DATA || (typeof window !== 'undefined' && window.location.hostname.includes('github.io'));
+const isLocalHost = typeof window !== 'undefined' && ['localhost', '127.0.0.1', '::1'].includes(window.location.hostname);
+const IS_STATIC_MODE = !isLocalHost && (USE_STATIC_DATA || (typeof window !== 'undefined' && window.location.hostname.includes('github.io')));
 const STATIC_AUTH_URL = `${BASE_URL}/admin-auth.json`;
 
 let staticAdminsCache = null;

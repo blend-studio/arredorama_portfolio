@@ -6,7 +6,8 @@ const API_BASE_URL = 'http://127.0.0.1:8000';
 
 // Modalità statica (es. GitHub Pages): se true, carica i progetti da projects.json invece che dall'API
 const USE_STATIC_DATA = import.meta.env.VITE_USE_STATIC_DATA === 'true';
-const IS_STATIC_MODE = USE_STATIC_DATA || (typeof window !== 'undefined' && window.location.hostname.includes('github.io'));
+const isLocalHost = typeof window !== 'undefined' && ['localhost', '127.0.0.1', '::1'].includes(window.location.hostname);
+const IS_STATIC_MODE = !isLocalHost && (USE_STATIC_DATA || (typeof window !== 'undefined' && window.location.hostname.includes('github.io')));
 const BASE_URL = (import.meta.env.BASE_URL || '/').replace(/\/$/, '');
 const STATIC_PROJECTS_URL = `${BASE_URL}/projects.json`;
 
@@ -160,6 +161,13 @@ const AdminDashboard = () => {
     // Normalizza backslash e rimuove slash iniziali
     const cleaned = imagePath.replace(/\\/g, '/').replace(/^\/+/, '');
 
+    // Se proviene dal backend (es. /storage/projects/xxx), servi da API
+    if (!IS_STATIC_MODE && cleaned.startsWith('storage/')) {
+      const backendUrl = `${API_BASE_URL}/${cleaned}`;
+      console.log('[IMG] storage path -> backend', backendUrl);
+      return backendUrl;
+    }
+
     // Rimuove prefissi comuni (images/, public/images/)
     let filename = cleaned;
     if (filename.startsWith('images/')) filename = filename.substring('images/'.length);
@@ -182,7 +190,7 @@ const AdminDashboard = () => {
       return staticUrl;
     }
 
-    const backendPath = `/images/ARREDORAMA-SMALL/${fileOnly}`;
+    const backendPath = `/images/${fileOnly}`;
     const backendUrl = `${API_BASE_URL}${backendPath}`;
     console.warn('[IMG] fallback to backend path:', backendUrl);
     return backendUrl;
