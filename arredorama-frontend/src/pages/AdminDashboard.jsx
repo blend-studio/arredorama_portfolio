@@ -10,6 +10,13 @@ const IS_STATIC_MODE = USE_STATIC_DATA || (typeof window !== 'undefined' && wind
 const BASE_URL = (import.meta.env.BASE_URL || '/').replace(/\/$/, '');
 const STATIC_PROJECTS_URL = `${BASE_URL}/projects.json`;
 
+const getPublicSiteUrl = () => {
+  if (IS_STATIC_MODE && typeof window !== 'undefined') {
+    return new URL(BASE_URL || '/', window.location.origin).toString();
+  }
+  return '/';
+};
+
 // Pre-carica tutte le immagini locali per evitare percorsi risolti in modo errato dal browser
 const imageModules = import.meta.glob('../assets/images/ARREDORAMA-SMALL/*', {
   eager: true,
@@ -333,7 +340,7 @@ const AdminDashboard = () => {
           </div>
           <div className="flex items-center gap-4">
             <a
-              href={IS_STATIC_MODE ? `${BASE_URL}/` : '/'}
+              href={getPublicSiteUrl()}
               className="text-gray-500 hover:text-red-600 text-sm"
             >
               Vai al sito →
