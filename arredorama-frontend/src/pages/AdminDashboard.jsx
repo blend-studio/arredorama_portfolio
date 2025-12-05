@@ -4,6 +4,11 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 const API_BASE_URL = 'http://127.0.0.1:8000';
 
+// Modalità statica (es. GitHub Pages): se true, carica i progetti da projects.json invece che dall'API
+const USE_STATIC_DATA = import.meta.env.VITE_USE_STATIC_DATA === 'true';
+const BASE_URL = (import.meta.env.BASE_URL || '/').replace(/\/$/, '');
+const STATIC_PROJECTS_URL = `${BASE_URL}/projects.json`;
+
 // Pre-carica tutte le immagini locali per evitare percorsi risolti in modo errato dal browser
 const imageModules = import.meta.glob('../assets/images/ARREDORAMA-SMALL/*', {
   eager: true,
@@ -55,8 +60,28 @@ const AdminDashboard = () => {
     };
   };
 
+  const loadStaticProjects = async () => {
+    const response = await fetch(STATIC_PROJECTS_URL);
+    const data = await response.json();
+    return Array.isArray(data)
+      ? data.map((item, idx) => ({
+          ...item,
+          // assicura il campo image coerente
+          image: item.image || item.image_url || item.imagePath || item.path || null,
+          // se manca id nel JSON, ne assegna uno per evitare key duplicate
+          id: item.id || idx + 1,
+        }))
+      : [];
+  };
+
   const fetchProjects = async () => {
     try {
+      if (USE_STATIC_DATA) {
+        const staticData = await loadStaticProjects();
+        setProjects(staticData);
+        return;
+      }
+
       const response = await fetch(`${API_BASE_URL}/api/admin/projects`, {
         headers: getAuthHeaders(),
       });
@@ -79,6 +104,15 @@ const AdminDashboard = () => {
       setProjects(normalized);
     } catch (error) {
       console.error('Errore nel caricamento progetti:', error);
+      // fallback statico se disponibile
+      if (!USE_STATIC_DATA) {
+        try {
+          const staticData = await loadStaticProjects();
+          setProjects(staticData);
+        } catch (staticErr) {
+          console.error('Errore caricando il JSON statico:', staticErr);
+        }
+      }
     } finally {
       setLoading(false);
     }
