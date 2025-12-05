@@ -333,7 +333,7 @@ const AdminDashboard = () => {
           </div>
           <div className="flex items-center gap-4">
             <a
-              href={IS_STATIC_MODE ? `${BASE_URL}/arredorama_portfolio` : '/'}
+              href={IS_STATIC_MODE ? `${BASE_URL}/` : '/'}
               className="text-gray-500 hover:text-red-600 text-sm"
             >
               Vai al sito →
