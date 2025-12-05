@@ -20,7 +20,8 @@ const Navbar = () => {
     { title: 'Home', path: '/' },
     { title: 'About', path: '/about' },
     { title: 'Projects', path: '/projects' },
-    { title: 'Contact', path: '/contact' }
+    { title: 'Contact', path: '/contact' },
+    { title: 'Area Riservata', path: '/admin' }
   ];
 
   return (
@@ -57,7 +58,7 @@ const Navbar = () => {
             initial={{ clipPath: "circle(0% at 100% 0%)" }}
             animate={{ clipPath: "circle(150% at 100% 0%)" }}
             exit={{ clipPath: "circle(0% at 100% 0%)" }}
-            transition={{ duration: 0.7, ease: [0.77, 0, 0.175, 1] }} // Animazione fluida custom
+            transition={{ duration: 0.7, ease: [0.77, 0, 0.175, 1] }}
             className="fixed inset-0 bg-[#0a0a0a] text-white z-[90] flex flex-col justify-center px-12 md:px-32"
           >
             <div className="flex flex-col gap-2">
@@ -71,7 +72,11 @@ const Navbar = () => {
                   >
                     <Link 
                       to={item.path} 
-                      className="text-5xl md:text-8xl font-thin tracking-tight hover:text-gray-400 transition-colors block"
+                      className={`tracking-tight hover:text-gray-400 transition-colors block ${
+                        item.title === 'Area Riservata' 
+                          ? 'text-2xl md:text-4xl font-normal text-red-500 hover:text-red-400 mt-8' 
+                          : 'text-5xl md:text-8xl font-thin'
+                      }`}
                     >
                       {item.title}
                     </Link>
