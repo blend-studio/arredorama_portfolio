@@ -332,7 +332,10 @@ const AdminDashboard = () => {
             <h1 className="text-xl font-bold text-gray-800">Dashboard Admin</h1>
           </div>
           <div className="flex items-center gap-4">
-            <a href={`${BASE_URL}/`} className="text-gray-500 hover:text-red-600 text-sm">
+            <a
+              href={IS_STATIC_MODE ? `${BASE_URL}/arredorama_portfolio` : '/'}
+              className="text-gray-500 hover:text-red-600 text-sm"
+            >
               Vai al sito →
             </a>
             <button
