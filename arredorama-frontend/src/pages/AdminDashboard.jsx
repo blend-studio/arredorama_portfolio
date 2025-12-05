@@ -6,6 +6,7 @@ const API_BASE_URL = 'http://127.0.0.1:8000';
 
 // Modalità statica (es. GitHub Pages): se true, carica i progetti da projects.json invece che dall'API
 const USE_STATIC_DATA = import.meta.env.VITE_USE_STATIC_DATA === 'true';
+const IS_STATIC_MODE = USE_STATIC_DATA || (typeof window !== 'undefined' && window.location.hostname.includes('github.io'));
 const BASE_URL = (import.meta.env.BASE_URL || '/').replace(/\/$/, '');
 const STATIC_PROJECTS_URL = `${BASE_URL}/projects.json`;
 
@@ -76,7 +77,7 @@ const AdminDashboard = () => {
 
   const fetchProjects = async () => {
     try {
-      if (USE_STATIC_DATA) {
+      if (IS_STATIC_MODE) {
         const staticData = await loadStaticProjects();
         setProjects(staticData);
         return;
@@ -105,7 +106,7 @@ const AdminDashboard = () => {
     } catch (error) {
       console.error('Errore nel caricamento progetti:', error);
       // fallback statico se disponibile
-      if (!USE_STATIC_DATA) {
+      if (!IS_STATIC_MODE) {
         try {
           const staticData = await loadStaticProjects();
           setProjects(staticData);
@@ -119,7 +120,7 @@ const AdminDashboard = () => {
   };
 
   const handleLogout = async () => {
-    if (USE_STATIC_DATA) {
+    if (IS_STATIC_MODE) {
       localStorage.removeItem('adminToken');
       localStorage.removeItem('adminUser');
       navigate('/admin');
@@ -168,7 +169,7 @@ const AdminDashboard = () => {
     }
 
     // Fallback differenziato: in modalità statica usa gli asset sotto BASE_URL, altrimenti backend
-    if (USE_STATIC_DATA) {
+    if (IS_STATIC_MODE) {
       const staticUrl = `${BASE_URL}/images/ARREDORAMA-SMALL/${fileOnly}`;
       console.warn('[IMG] fallback to static path:', staticUrl);
       return staticUrl;
@@ -242,7 +243,7 @@ const AdminDashboard = () => {
     setSaving(true);
 
     try {
-      if (USE_STATIC_DATA) {
+      if (IS_STATIC_MODE) {
         alert('Modalità sola lettura su GitHub Pages: modifica/disponibile solo in ambiente backend.');
         return;
       }
@@ -286,7 +287,7 @@ const AdminDashboard = () => {
   };
 
   const handleDelete = async (id) => {
-    if (USE_STATIC_DATA) {
+    if (IS_STATIC_MODE) {
       alert('Modalità sola lettura su GitHub Pages: eliminazione disponibile solo in ambiente backend.');
       return;
     }
