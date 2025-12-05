@@ -167,8 +167,14 @@ const AdminDashboard = () => {
       return resolved;
     }
 
-    // Fallback: serve dal backend (public/images) usando l'API base
-    const backendPath = `/public/images/${fileOnly}`;
+    // Fallback differenziato: in modalità statica usa gli asset sotto BASE_URL, altrimenti backend
+    if (USE_STATIC_DATA) {
+      const staticUrl = `${BASE_URL}/images/ARREDORAMA-SMALL/${fileOnly}`;
+      console.warn('[IMG] fallback to static path:', staticUrl);
+      return staticUrl;
+    }
+
+    const backendPath = `/images/ARREDORAMA-SMALL/${fileOnly}`;
     const backendUrl = `${API_BASE_URL}${backendPath}`;
     console.warn('[IMG] fallback to backend path:', backendUrl);
     return backendUrl;
