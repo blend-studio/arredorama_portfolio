@@ -4,6 +4,12 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 const API_BASE_URL = 'http://127.0.0.1:8000';
 
+// Pre-carica tutte le immagini locali per evitare percorsi risolti in modo errato dal browser
+const imageModules = import.meta.glob('../assets/images/ARREDORAMA-SMALL/*', {
+  eager: true,
+  import: 'default',
+});
+
 const AdminDashboard = () => {
   const navigate = useNavigate();
   const [projects, setProjects] = useState([]);
@@ -102,21 +108,29 @@ const AdminDashboard = () => {
       return imagePath;
     }
 
-    // Normalizza backslash
-    const cleaned = imagePath.replace(/\\/g, '/');
-    // Rimuove eventuali prefissi comuni
-    const noLeadingSlash = cleaned.replace(/^\/+/, '');
-    const withoutImagesPrefix = noLeadingSlash.startsWith('images/')
-      ? noLeadingSlash.substring('images/'.length)
-      : noLeadingSlash;
-    const filename = withoutImagesPrefix.startsWith('public/images/')
-      ? withoutImagesPrefix.substring('public/images/'.length)
-      : withoutImagesPrefix;
+    // Normalizza backslash e rimuove slash iniziali
+    const cleaned = imagePath.replace(/\\/g, '/').replace(/^\/+/, '');
 
-    // Risolve il file dentro src/assets/images (frontend)
-    const finalUrl = new URL(`/src/assets/images/${filename}`, import.meta.url).href;
-    console.log('[IMG] db path:', imagePath, '| cleaned:', filename, '| final url:', finalUrl);
-    return finalUrl;
+    // Rimuove prefissi comuni (images/, public/images/)
+    let filename = cleaned;
+    if (filename.startsWith('images/')) filename = filename.substring('images/'.length);
+    if (filename.startsWith('public/images/')) filename = filename.substring('public/images/'.length);
+
+    // Mantieni solo il nome file e prova a risolvere tramite gli asset importati
+    const fileOnly = filename.split('/').pop();
+    const key = `../assets/images/ARREDORAMA-SMALL/${fileOnly}`;
+    const resolved = imageModules[key];
+
+    if (resolved) {
+      console.log('[IMG] db path:', imagePath, '| resolved via glob:', key, '| final url:', resolved);
+      return resolved;
+    }
+
+    // Fallback: serve dal backend (public/images) usando l'API base
+    const backendPath = `/public/images/${fileOnly}`;
+    const backendUrl = `${API_BASE_URL}${backendPath}`;
+    console.warn('[IMG] fallback to backend path:', backendUrl);
+    return backendUrl;
   };
 
   const openModal = (project = null) => {
@@ -310,7 +324,7 @@ const AdminDashboard = () => {
                     className="w-full h-full object-cover"
                     onError={(e) => {
                       e.target.onerror = null;
-                      e.target.src = 'https://via.placeholder.com/400x300?text=No+Image';
+                      e.target.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300"><rect width="100%" height="100%" fill="%23e5e7eb"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="%239ca3af" font-size="20">No Image</text></svg>';
                     }}
                   />
                 ) : (
@@ -549,7 +563,7 @@ const AdminDashboard = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/50 z-50 flex itemscenter justify-center p-4"
+            className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4"
             onClick={() => setDeleteConfirm(null)}
           >
             <motion.div
