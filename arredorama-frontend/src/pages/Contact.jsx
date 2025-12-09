@@ -102,7 +102,7 @@ const Contact = () => {
           animate={{ opacity: 1, y: 0 }}
           className="mb-12 md:mb-16 lg:mb-24"
         >
-          <span className="text-[#ff5149] uppercase tracking-[0.2em] text-xs font-bold">Contattaci</span>
+          <span className="text-[#00b7cd] uppercase tracking-[0.2em] text-xs font-bold">Contattaci</span>
           <h1 className="text-5xl md:text-7xl font-bold mt-2 tracking-tighter">Parliamo del<br/>tuo progetto.</h1>
         </motion.div>
 
@@ -118,7 +118,7 @@ const Contact = () => {
             {/* Nome */}
             <motion.div variants={itemVariants} custom={0}>
               <label className="block text-xs uppercase tracking-widest text-gray-400 mb-2">
-                Nome e Cognome <span className="text-[#ff5149]">*</span>
+                Nome e Cognome <span className="text-[#00b7cd]">*</span>
               </label>
               <input 
                 type="text" 
@@ -133,7 +133,7 @@ const Contact = () => {
             {/* Email */}
             <motion.div variants={itemVariants} custom={1}>
               <label className="block text-xs uppercase tracking-widest text-gray-400 mb-2">
-                Email <span className="text-[#ff5149]">*</span>
+                Email <span className="text-[#00b7cd]">*</span>
               </label>
               <input 
                 type="email" 
@@ -201,7 +201,7 @@ const Contact = () => {
             {/* Messaggio */}
             <motion.div variants={itemVariants} custom={5}>
               <label className="block text-xs uppercase tracking-widest text-gray-400 mb-2">
-                Messaggio <span className="text-[#ff5149]">*</span>
+                Messaggio <span className="text-[#00b7cd]">*</span>
               </label>
               <textarea 
                 name="message"
@@ -234,7 +234,7 @@ const Contact = () => {
                 type="submit"
                 disabled={loading}
                 className={`bg-black text-white px-12 py-5 uppercase font-bold tracking-widest 
-                  hover:bg-[#ff5149] transition-all duration-300 
+                  hover:bg-[#00b7cd] transition-all duration-300 
                   ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
               >
                 {loading ? (
@@ -280,10 +280,10 @@ const Contact = () => {
             <div className="border-t border-gray-200 pt-6">
               <h3 className="text-xs uppercase tracking-widest text-gray-400 mb-4">Contatti Diretti</h3>
               <div className="space-y-3">
-                <a href="tel:+390212345678" className="block text-lg font-light hover:text-[#ff5149] transition-colors">
+                <a href="tel:+390212345678" className="block text-lg font-light hover:text-[#00b7cd] transition-colors">
                   +39 02 1234 5678
                 </a>
-                <a href="mailto:info@arredorama.it" className="block text-lg font-light hover:text-[#ff5149] transition-colors">
+                <a href="mailto:info@arredorama.it" className="block text-lg font-light hover:text-[#00b7cd] transition-colors">
                   info@arredorama.it
                 </a>
               </div>
@@ -293,9 +293,9 @@ const Contact = () => {
             <div className="border-t border-gray-200 pt-6">
               <h3 className="text-xs uppercase tracking-widest text-gray-400 mb-4">Seguici</h3>
               <div className="flex gap-6">
-                <a href="#" className="text-lg font-light hover:text-[#ff5149] transition-colors">Instagram</a>
-                <a href="#" className="text-lg font-light hover:text-[#ff5149] transition-colors">Pinterest</a>
-                <a href="#" className="text-lg font-light hover:text-[#ff5149] transition-colors">LinkedIn</a>
+                <a href="#" className="text-lg font-light hover:text-[#00b7cd] transition-colors">Instagram</a>
+                <a href="#" className="text-lg font-light hover:text-[#00b7cd] transition-colors">Pinterest</a>
+                <a href="#" className="text-lg font-light hover:text-[#00b7cd] transition-colors">LinkedIn</a>
               </div>
             </div>
 

@@ -96,7 +96,7 @@ const ProjectDetail = () => {
     return (
       <div className="w-full min-h-screen bg-white flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#ff5149] mx-auto mb-4"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#00b7cd] mx-auto mb-4"></div>
           <p className="text-gray-500">Caricamento progetto...</p>
         </div>
       </div>
@@ -108,7 +108,7 @@ const ProjectDetail = () => {
       <div className="w-full min-h-screen bg-white flex items-center justify-center">
         <div className="text-center">
           <h2 className="text-2xl font-light mb-4">Progetto non trovato</h2>
-          <Link to="/projects" className="text-[#ff5149] hover:underline">← Torna ai Progetti</Link>
+          <Link to="/projects" className="text-[#00b7cd] hover:underline">← Torna ai Progetti</Link>
         </div>
       </div>
     );
@@ -185,7 +185,7 @@ const ProjectDetail = () => {
            <motion.div variants={itemVariants}>
              <Link to="/projects" className="text-xs uppercase tracking-widest text-gray-400 hover:text-black transition-colors mb-4 inline-block">← Torna ai Progetti</Link>
            </motion.div>
-           <motion.span variants={itemVariants} className="text-[#ff5149] uppercase tracking-[0.2em] text-xs font-bold block mb-2">{project.category}</motion.span>
+           <motion.span variants={itemVariants} className="text-[#00b7cd] uppercase tracking-[0.2em] text-xs font-bold block mb-2">{project.category}</motion.span>
            <motion.h1 variants={itemVariants} className="text-5xl md:text-7xl font-bold tracking-tighter">{project.title}</motion.h1>
         </div>
 

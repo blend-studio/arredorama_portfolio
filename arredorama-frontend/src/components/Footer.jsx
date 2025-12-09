@@ -16,7 +16,7 @@ const Footer = () => {
             <motion.button 
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="bg-white text-black px-10 py-4 uppercase text-xs font-bold tracking-[0.2em] hover:bg-[#ff5149] hover:text-white transition-colors duration-300"
+              className="bg-white text-black px-10 py-4 uppercase text-xs font-bold tracking-[0.2em] hover:bg-[#00b7cd] hover:text-white transition-colors duration-300"
             >
               Parliamone
             </motion.button>

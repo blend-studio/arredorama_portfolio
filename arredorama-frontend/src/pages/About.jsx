@@ -25,7 +25,7 @@ const About = () => {
             viewport={{once: true}}
             transition={{duration: 0.8}}
          >
-            <span className="text-[#ff5149] uppercase tracking-[0.2em] text-xs font-bold mb-4 block">La Nostra Filosofia</span>
+            <span className="text-[#00b7cd] uppercase tracking-[0.2em] text-xs font-bold mb-4 block">La Nostra Filosofia</span>
             <h1 className="text-4xl md:text-6xl font-light mb-12 max-w-4xl leading-tight">
               Disporre gli spazi con eleganza, gusto e funzionalità è la nostra prerogativa principale.
             </h1>
@@ -59,7 +59,7 @@ const About = () => {
                   <img src={member.img} alt={member.name} className="w-full h-auto object-cover grayscale group-hover:grayscale-0 transition-all duration-700 transform group-hover:scale-105" />
                </div>
                <h3 className="text-xl font-medium">{member.name}</h3>
-               <p className="text-[#ff5149] text-xs uppercase tracking-widest font-bold mt-1 mb-2">{member.role}</p>
+               <p className="text-[#00b7cd] text-xs uppercase tracking-widest font-bold mt-1 mb-2">{member.role}</p>
                <p className="text-gray-500 text-sm font-light">{member.sub}</p>
                <a href={`mailto:${member.email}`} className="text-gray-400 text-sm hover:text-black transition-colors mt-2 block">{member.email}</a>
             </motion.div>

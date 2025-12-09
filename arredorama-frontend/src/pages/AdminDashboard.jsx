@@ -45,6 +45,10 @@ const AdminDashboard = () => {
 
   // Verifica autenticazione
   useEffect(() => {
+    // Reset scroll e overflow per sicurezza
+    window.scrollTo(0, 0);
+    document.body.style.overflow = 'auto';
+
     const token = localStorage.getItem('adminToken');
     if (!token) {
       navigate('/admin');

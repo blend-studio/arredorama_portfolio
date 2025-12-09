@@ -103,7 +103,7 @@ const Projects = () => {
     return (
       <div className="w-full min-h-screen bg-white text-black pt-28 md:pt-32 pb-20 px-6 md:px-12 flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#ff5149] mx-auto mb-4"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#00b7cd] mx-auto mb-4"></div>
           <p className="text-gray-500">Caricamento progetti...</p>
         </div>
       </div>
@@ -127,7 +127,7 @@ const Projects = () => {
          className="flex flex-col md:flex-row justify-between items-end mb-12 md:mb-20 border-b border-gray-200 pb-8"
       >
         <div>
-           <span className="text-[#ff5149] uppercase tracking-[0.2em] text-xs font-bold">Lavori Selezionati</span>
+           <span className="text-[#00b7cd] uppercase tracking-[0.2em] text-xs font-bold">Lavori Selezionati</span>
            <h1 className="text-5xl md:text-7xl font-thin mt-2 tracking-tighter">Portfolio.</h1>
         </div>
         
@@ -176,7 +176,7 @@ const Projects = () => {
                 </div>
                 
                 <div className="mt-6">
-                    <h3 className="text-2xl font-light group-hover:text-[#ff5149] transition-colors duration-300">{p.title}</h3>
+                    <h3 className="text-2xl font-light group-hover:text-[#00b7cd] transition-colors duration-300">{p.title}</h3>
                     <span className="text-xs text-gray-400 uppercase tracking-widest font-bold mt-1 block">{p.category}</span>
                 </div>
               </Link>

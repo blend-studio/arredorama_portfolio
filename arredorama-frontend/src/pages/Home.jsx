@@ -84,12 +84,12 @@ const TextWithImagesSection = () => {
     <section className="py-16 md:py-24 bg-white">
       <div className="container mx-auto px-6 md:px-12 lg:px-20">
         <motion.div initial={{ opacity: 0, y: 50 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.8 }} className="text-center">
-          <span className="text-[#ff5149] uppercase tracking-[0.3em] text-xs font-bold mb-6 block">ARREDORAMA</span>
+          <span className="text-[#00b7cd] uppercase tracking-[0.3em] text-xs font-bold mb-6 block">ARREDORAMA</span>
           <h2 className="text-3xl md:text-5xl lg:text-6xl font-semibold leading-[1.4] md:leading-[1.5] text-black max-w-5xl mx-auto">
             Stiamo <span className="inline-flex items-center align-middle mx-2"><img src={INLINE_IMAGES[0]} className="w-10 h-10 md:w-14 md:h-14 rounded-full object-cover inline-block" alt="" /></span> cambiando il modo in cui <span className="font-semibold underline decoration-2 underline-offset-4">l'interior design</span> è <span className="inline-flex items-center align-middle mx-2"><img src={INLINE_IMAGES[1]} className="w-10 h-10 md:w-14 md:h-14 rounded-full object-cover inline-block" alt="" /></span> progettato, offrendo <span className="inline-flex items-center align-middle mx-2"><img src={INLINE_IMAGES[2]} className="w-10 h-10 md:w-14 md:h-14 rounded-full object-cover inline-block" alt="" /></span> soluzioni su misura nel nostro <span className="font-semibold underline decoration-2 underline-offset-4">processo creativo</span>.
           </h2>
           <p className="mt-12 text-gray-500 text-lg md:text-xl font-light max-w-3xl mx-auto leading-relaxed">Il grande spazio delle idee. Arredorama si occupa da oltre trent'anni di fornitura di arredi, progettazione e realizzazione di spazi interni.</p>
-          <Link to="/about" className="mt-10 inline-flex items-center gap-3 text-sm uppercase tracking-widest font-medium hover:text-[#ff5149] transition-colors group">Scopri la nostra storia <span className="group-hover:translate-x-2 transition-transform">→</span></Link>
+          <Link to="/about" className="mt-10 inline-flex items-center gap-3 text-sm uppercase tracking-widest font-medium hover:text-[#00b7cd] transition-colors group">Scopri la nostra storia <span className="group-hover:translate-x-2 transition-transform">→</span></Link>
         </motion.div>
       </div>
     </section>
@@ -113,7 +113,7 @@ const ServiceCardPinned = ({ service, index, total, scrollYProgress }) => {
       <div className="absolute inset-0 flex items-start justify-center bg-white pt-12 md:pt-32" style={{ zIndex: index }}>
         <div className="container mx-auto px-5 sm:px-6 md:px-12 grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-start pt-2 md:pt-0">
             <div className="md:pr-6 lg:pr-12 bg-white md:bg-transparent backdrop-blur-sm md:backdrop-blur-none p-2.5 rounded-xl md:p-0 z-20">
-              <span className="text-[#ff5149] text-[1.85rem] sm:text-5xl md:text-7xl lg:text-9xl font-bold opacity-20 block mt-3 mb-1 -ml-1">{service.num}</span>
+              <span className="text-[#00b7cd] text-[1.85rem] sm:text-5xl md:text-7xl lg:text-9xl font-bold opacity-20 block mt-3 mb-1 -ml-1">{service.num}</span>
               <h3 className="text-[1.3rem] sm:text-[1.85rem] md:text-4xl lg:text-6xl font-bold text-black mb-2.5 md:mb-7 leading-tight">{service.title}</h3>
               <p className="text-gray-600 font-light text-[0.92rem] sm:text-base md:text-lg lg:text-xl leading-relaxed mb-2.5 md:mb-6">{service.description}</p>
               <div className="w-12 h-[1px] bg-black mb-2.5 md:mb-6"></div>
@@ -134,7 +134,7 @@ const ServiceCardPinned = ({ service, index, total, scrollYProgress }) => {
     >
       <div className="container mx-auto px-6 md:px-12 grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-start pt-2 md:pt-0">
           <div className="md:pr-6 lg:pr-12 bg-white md:bg-transparent backdrop-blur-sm md:backdrop-blur-none p-2.5 rounded-xl md:p-0 z-20">
-            <span className="text-[#ff5149] text-[1.85rem] sm:text-5xl md:text-7xl lg:text-9xl font-bold opacity-20 block mt-3 mb-1 -ml-2">{service.num}</span>
+            <span className="text-[#00b7cd] text-[1.85rem] sm:text-5xl md:text-7xl lg:text-9xl font-bold opacity-20 block mt-3 mb-1 -ml-2">{service.num}</span>
             <h3 className="text-[1.3rem] sm:text-[1.85rem] md:text-4xl lg:text-6xl font-bold text-black mb-2.5 md:mb-7 leading-tight">{service.title}</h3>
             <p className="text-gray-600 font-light text-[0.92rem] sm:text-base md:text-lg lg:text-xl leading-relaxed mb-2.5 md:mb-6">{service.description}</p>
             <div className="w-12 h-[1px] bg-black mb-2.5 md:mb-6"></div>
@@ -167,7 +167,7 @@ const ServicesScrollSection = () => {
       <div className="container mx-auto px-5 sm:px-6 md:px-12 py-6 md:py-10 border-b border-gray-100">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 items-end">
           <div>
-            <span className="text-[#ff5149] uppercase tracking-[0.3em] text-xs font-bold mb-4 block">I NOSTRI SERVIZI</span>
+            <span className="text-[#00b7cd] uppercase tracking-[0.3em] text-xs font-bold mb-4 block">I NOSTRI SERVIZI</span>
             <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-black leading-tight">Diamo valore ai tuoi spazi.</h2>
           </div>
           <div className="md:text-right">
@@ -274,7 +274,7 @@ const ProjectSlider = ({ projects }) => {
             <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-all duration-500 pointer-events-none"></div>
             <div className="absolute bottom-8 left-8 pointer-events-none">
               <h4 className="text-3xl font-bold text-white drop-shadow-lg">{project.title}</h4>
-              <span className="text-white/90 text-xs uppercase tracking-widest font-bold border-l-2 border-[#ff5149] pl-3">{project.category}</span>
+              <span className="text-white/90 text-xs uppercase tracking-widest font-bold border-l-2 border-[#00b7cd] pl-3">{project.category}</span>
             </div>
           </motion.div>
         ))}
@@ -351,13 +351,13 @@ const Home = () => {
       {/* 3. Filosofia */}
       <section className="py-16 md:py-24 lg:py-32 container mx-auto px-6 md:px-12 lg:px-20 grid grid-cols-1 lg:grid-cols-2 gap-14 lg:gap-20 items-center">
         <motion.div style={{ y: yParallax }}>
-          <span className="text-[#ff5149] uppercase tracking-[0.2em] text-xs font-bold mb-6 block">Philosophy</span>
+          <span className="text-[#00b7cd] uppercase tracking-[0.2em] text-xs font-bold mb-6 block">Philosophy</span>
           <h2 className="text-4xl md:text-5xl font-semibold leading-tight mb-8 text-black">Disporre gli spazi con <span className="font-serif italic">eleganza</span>, gusto e funzionalità.</h2>
           <div className="text-gray-500 text-lg font-light leading-relaxed mb-8 space-y-6">
             <p>Arredorama si occupa da oltre trent'anni della fornitura di arredi, della progettazione e della realizzazione degli spazi interni relativamente ad abitazioni private e spazi commerciali.</p>
             <p>Assistenza e consulenza nello studio delle esigenze di arredamento e nella scelta del prodotto ideale sono alla base del nostro lavoro.</p>
           </div>
-          <Link to="/about" className="group inline-flex items-center gap-2 border-b border-black pb-1 uppercase text-xs tracking-widest hover:text-[#ff5149] hover:border-[#ff5149] transition-all">Scopri di più su di noi <span className="group-hover:translate-x-1 transition-transform">→</span></Link>
+          <Link to="/about" className="group inline-flex items-center gap-2 border-b border-black pb-1 uppercase text-xs tracking-widest hover:text-[#00b7cd] hover:border-[#00b7cd] transition-all">Scopri di più su di noi <span className="group-hover:translate-x-1 transition-transform">→</span></Link>
         </motion.div>
         <div className="h-[50vh] md:h-[60vh] lg:h-[80vh] w-full overflow-hidden relative bg-gray-100">
            <motion.img style={{ scale: scaleImage }} src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?q=80&w=2000" className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-1000" alt="Interior Vision" />
@@ -373,7 +373,7 @@ const Home = () => {
         <div className="container mx-auto px-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-10 md:gap-12 text-center">
           {[{ num: "30+", label: "Anni di Esperienza" }, { num: "500+", label: "Progetti Realizzati" }, { num: "100%", label: "Made in Italy" }, { num: "15", label: "Brand Partner" }].map((stat, i) => (
             <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }}>
-              <div className="text-5xl md:text-7xl font-bold mb-2 text-[#ff5149]">{stat.num}</div>
+              <div className="text-5xl md:text-7xl font-bold mb-2 text-[#00b7cd]">{stat.num}</div>
               <div className="text-xs uppercase tracking-widest text-gray-400">{stat.label}</div>
             </motion.div>
           ))}
@@ -397,7 +397,7 @@ const Home = () => {
       {/* 6. CTA */}
       <section className="py-16 md:py-24 bg-gray-50 border-t border-gray-200 text-center px-4">
         <h2 className="text-3xl md:text-5xl font-semibold mb-8 leading-tight">Pronto a trasformare <br/> il tuo spazio?</h2>
-        <Link to="/contact"><button className="bg-black text-white px-12 py-5 uppercase text-xs font-bold tracking-[0.2em] hover:bg-[#ff5149] transition-colors duration-300">Inizia un Progetto</button></Link>
+        <Link to="/contact"><button className="bg-black text-white px-12 py-5 uppercase text-xs font-bold tracking-[0.2em] hover:bg-[#00b7cd] transition-colors duration-300">Inizia un Progetto</button></Link>
       </section>
     </div>
   );
