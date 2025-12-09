@@ -81,7 +81,7 @@ const ParallaxTextSection = () => {
 
 const TextWithImagesSection = () => {
   return (
-    <section className="py-32 md:py-40 bg-white">
+    <section className="py-16 md:py-24 bg-white">
       <div className="container mx-auto px-6 md:px-12 lg:px-20">
         <motion.div initial={{ opacity: 0, y: 50 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.8 }} className="text-center">
           <span className="text-[#ff5149] uppercase tracking-[0.3em] text-xs font-bold mb-6 block">ARREDORAMA</span>
@@ -110,16 +110,16 @@ const ServiceCardPinned = ({ service, index, total, scrollYProgress }) => {
 
   if (index === 0) {
     return (
-      <div className="absolute inset-0 flex items-center justify-center bg-white" style={{ zIndex: index }}>
-        <div className="container mx-auto px-5 sm:px-6 md:px-12 grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-12 items-center h-full pt-5 sm:pt-8 md:pt-0">
-            <div className="md:pr-12 bg-white md:bg-transparent backdrop-blur-sm md:backdrop-blur-none p-2.5 rounded-xl md:p-0 z-20">
-              <span className="text-[#ff5149] text-[1.85rem] sm:text-5xl md:text-9xl font-bold opacity-20 block mt-3 mb-1 -ml-1">{service.num}</span>
-              <h3 className="text-[1.3rem] sm:text-[1.85rem] md:text-6xl font-bold text-black mb-2.5 md:mb-7 leading-tight">{service.title}</h3>
-              <p className="text-gray-600 font-light text-[0.92rem] sm:text-base md:text-xl leading-relaxed mb-2.5 md:mb-6">{service.description}</p>
+      <div className="absolute inset-0 flex items-start justify-center bg-white pt-12 md:pt-32" style={{ zIndex: index }}>
+        <div className="container mx-auto px-5 sm:px-6 md:px-12 grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-start pt-2 md:pt-0">
+            <div className="md:pr-6 lg:pr-12 bg-white md:bg-transparent backdrop-blur-sm md:backdrop-blur-none p-2.5 rounded-xl md:p-0 z-20">
+              <span className="text-[#ff5149] text-[1.85rem] sm:text-5xl md:text-7xl lg:text-9xl font-bold opacity-20 block mt-3 mb-1 -ml-1">{service.num}</span>
+              <h3 className="text-[1.3rem] sm:text-[1.85rem] md:text-4xl lg:text-6xl font-bold text-black mb-2.5 md:mb-7 leading-tight">{service.title}</h3>
+              <p className="text-gray-600 font-light text-[0.92rem] sm:text-base md:text-lg lg:text-xl leading-relaxed mb-2.5 md:mb-6">{service.description}</p>
               <div className="w-12 h-[1px] bg-black mb-2.5 md:mb-6"></div>
-              <p className="text-gray-400 font-light text-[0.9rem] md:text-base leading-relaxed">{service.longDesc}</p>
+              <p className="text-gray-400 font-light text-[0.9rem] md:text-sm lg:text-base leading-relaxed">{service.longDesc}</p>
             </div>
-            <div className="relative h-[28vh] sm:h-[34vh] md:h-[60vh] w-full overflow-hidden shadow-none md:shadow-2xl rounded-sm">
+            <div className="relative h-[28vh] sm:h-[34vh] md:h-[45vh] lg:h-[60vh] w-full overflow-hidden shadow-none md:shadow-2xl rounded-sm">
                <img src={service.image} alt={service.title} className="w-full h-full object-cover" />
             </div>
         </div>
@@ -130,17 +130,17 @@ const ServiceCardPinned = ({ service, index, total, scrollYProgress }) => {
   return (
     <motion.div 
       style={{ y, rotateX, scale, opacity, zIndex: index + 1, transformPerspective: 1000 }}
-      className="absolute inset-0 flex items-center justify-center bg-white origin-bottom"
+      className="absolute inset-0 flex items-start justify-center bg-white origin-bottom pt-12 md:pt-32"
     >
-      <div className="container mx-auto px-6 md:px-12 grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-12 items-center h-full pt-4 md:pt-0">
-          <div className="md:pr-12 bg-white md:bg-transparent backdrop-blur-sm md:backdrop-blur-none p-2.5 rounded-xl md:p-0 z-20">
-            <span className="text-[#ff5149] text-[1.85rem] sm:text-5xl md:text-9xl font-bold opacity-20 block mt-3 mb-1 -ml-2">{service.num}</span>
-            <h3 className="text-[1.3rem] sm:text-[1.85rem] md:text-6xl font-bold text-black mb-2.5 md:mb-7 leading-tight">{service.title}</h3>
-            <p className="text-gray-600 font-light text-[0.92rem] sm:text-base md:text-xl leading-relaxed mb-2.5 md:mb-6">{service.description}</p>
+      <div className="container mx-auto px-6 md:px-12 grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-start pt-2 md:pt-0">
+          <div className="md:pr-6 lg:pr-12 bg-white md:bg-transparent backdrop-blur-sm md:backdrop-blur-none p-2.5 rounded-xl md:p-0 z-20">
+            <span className="text-[#ff5149] text-[1.85rem] sm:text-5xl md:text-7xl lg:text-9xl font-bold opacity-20 block mt-3 mb-1 -ml-2">{service.num}</span>
+            <h3 className="text-[1.3rem] sm:text-[1.85rem] md:text-4xl lg:text-6xl font-bold text-black mb-2.5 md:mb-7 leading-tight">{service.title}</h3>
+            <p className="text-gray-600 font-light text-[0.92rem] sm:text-base md:text-lg lg:text-xl leading-relaxed mb-2.5 md:mb-6">{service.description}</p>
             <div className="w-12 h-[1px] bg-black mb-2.5 md:mb-6"></div>
-            <p className="text-gray-400 font-light text-[0.9rem] md:text-base leading-relaxed">{service.longDesc}</p>
+            <p className="text-gray-400 font-light text-[0.9rem] md:text-sm lg:text-base leading-relaxed">{service.longDesc}</p>
           </div>
-           <div className="relative h-[28vh] sm:h-[34vh] md:h-[60vh] w-full overflow-hidden shadow-none md:shadow-2xl rounded-sm">
+           <div className="relative h-[28vh] sm:h-[34vh] md:h-[45vh] lg:h-[60vh] w-full overflow-hidden shadow-none md:shadow-2xl rounded-sm">
              <img src={service.image} alt={service.title} className="w-full h-full object-cover" />
           </div>
       </div>
@@ -164,11 +164,11 @@ const ServicesScrollSection = () => {
 
   return (
     <section className="bg-white relative border-t border-gray-100">
-      <div className="container mx-auto px-5 sm:px-6 md:px-12 py-16 md:py-20 border-b border-gray-100">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-end">
+      <div className="container mx-auto px-5 sm:px-6 md:px-12 py-6 md:py-10 border-b border-gray-100">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 items-end">
           <div>
             <span className="text-[#ff5149] uppercase tracking-[0.3em] text-xs font-bold mb-4 block">I NOSTRI SERVIZI</span>
-            <h2 className="text-3xl sm:text-4xl md:text-6xl font-bold text-black leading-tight">Diamo valore<br />ai tuoi spazi.</h2>
+            <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-black leading-tight">Diamo valore ai tuoi spazi.</h2>
           </div>
           <div className="md:text-right">
           </div>
@@ -184,7 +184,6 @@ const ServicesScrollSection = () => {
           </div>
         </div>
       </div>
-      <div className="h-[20vh] bg-white"></div>
     </section>
   );
 };
@@ -196,21 +195,29 @@ const ProjectSlider = ({ projects }) => {
   const [width, setWidth] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
   const carouselRef = useRef();
+  const innerRef = useRef();
 
   useEffect(() => {
     const updateWidth = () => {
-      if (carouselRef.current) {
-        setWidth(carouselRef.current.scrollWidth - carouselRef.current.offsetWidth);
+      if (carouselRef.current && innerRef.current) {
+        // Calcola la larghezza scorrevole corretta
+        const scrollWidth = innerRef.current.scrollWidth;
+        const offsetWidth = carouselRef.current.offsetWidth;
+        // Aggiungiamo un piccolo buffer per sicurezza
+        setWidth(scrollWidth - offsetWidth + 20);
       }
     };
 
     updateWidth();
     window.addEventListener('resize', updateWidth);
-    const timer = setTimeout(updateWidth, 200);
+    // Eseguiamo il controllo più volte per assicurarci che il layout sia stabile
+    const timer1 = setTimeout(updateWidth, 100);
+    const timer2 = setTimeout(updateWidth, 500);
 
     return () => {
       window.removeEventListener('resize', updateWidth);
-      clearTimeout(timer);
+      clearTimeout(timer1);
+      clearTimeout(timer2);
     };
   }, [projects]);
 
@@ -233,7 +240,7 @@ const ProjectSlider = ({ projects }) => {
 
   if (projects.length === 0) {
     return (
-      <div className="min-w-[85vw] md:min-w-[40vw] lg:min-w-[30vw] h-[65vh] relative bg-gray-100 flex items-center justify-center">
+      <div className="min-w-[85vw] md:min-w-[85vw] lg:min-w-[30vw] h-[65vh] relative bg-gray-100 flex items-center justify-center">
         <p className="text-gray-400">Caricamento progetti...</p>
       </div>
     );
@@ -242,6 +249,7 @@ const ProjectSlider = ({ projects }) => {
   return (
     <motion.div ref={carouselRef} className="cursor-grab active:cursor-grabbing overflow-hidden">
       <motion.div 
+        ref={innerRef}
         drag="x" 
         dragConstraints={{ right: 0, left: -width }} 
         dragElastic={0.1}
@@ -253,7 +261,7 @@ const ProjectSlider = ({ projects }) => {
         {projects.map((project) => (
           <motion.div 
             key={project.id} 
-            className="min-w-[85vw] md:min-w-[40vw] lg:min-w-[30vw] h-[65vh] relative group overflow-hidden cursor-pointer"
+            className="min-w-[85vw] md:min-w-[85vw] lg:min-w-[30vw] h-[65vh] relative group overflow-hidden cursor-pointer"
             onClick={(e) => handleCardClick(project.id, e)}
           >
             <img 
@@ -341,7 +349,7 @@ const Home = () => {
       </div>
 
       {/* 3. Filosofia */}
-      <section className="py-16 md:py-32 container mx-auto px-6 md:px-20 grid grid-cols-1 md:grid-cols-2 gap-14 md:gap-20 items-center">
+      <section className="py-16 md:py-24 lg:py-32 container mx-auto px-6 md:px-12 lg:px-20 grid grid-cols-1 lg:grid-cols-2 gap-14 lg:gap-20 items-center">
         <motion.div style={{ y: yParallax }}>
           <span className="text-[#ff5149] uppercase tracking-[0.2em] text-xs font-bold mb-6 block">Philosophy</span>
           <h2 className="text-4xl md:text-5xl font-semibold leading-tight mb-8 text-black">Disporre gli spazi con <span className="font-serif italic">eleganza</span>, gusto e funzionalità.</h2>
@@ -351,7 +359,7 @@ const Home = () => {
           </div>
           <Link to="/about" className="group inline-flex items-center gap-2 border-b border-black pb-1 uppercase text-xs tracking-widest hover:text-[#ff5149] hover:border-[#ff5149] transition-all">Scopri di più su di noi <span className="group-hover:translate-x-1 transition-transform">→</span></Link>
         </motion.div>
-        <div className="h-[80vh] w-full overflow-hidden relative bg-gray-100">
+        <div className="h-[50vh] md:h-[60vh] lg:h-[80vh] w-full overflow-hidden relative bg-gray-100">
            <motion.img style={{ scale: scaleImage }} src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?q=80&w=2000" className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-1000" alt="Interior Vision" />
         </div>
       </section>
@@ -361,7 +369,7 @@ const Home = () => {
       <ServicesScrollSection />
 
       {/* 4. Stats */}
-      <section className="py-16 md:py-20 bg-[#1a1a1a] text-white">
+      <section className="py-8 md:py-12 bg-[#1a1a1a] text-white">
         <div className="container mx-auto px-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-10 md:gap-12 text-center">
           {[{ num: "30+", label: "Anni di Esperienza" }, { num: "500+", label: "Progetti Realizzati" }, { num: "100%", label: "Made in Italy" }, { num: "15", label: "Brand Partner" }].map((stat, i) => (
             <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }}>
@@ -373,8 +381,8 @@ const Home = () => {
       </section>
 
       {/* 5. Preview - Draggable Slider con progetti dal DB */}
-      <section className="py-20 md:py-32 bg-white overflow-hidden">
-        <div className="container mx-auto px-6 mb-12 md:mb-16 flex flex-col md:flex-row justify-between items-end border-b border-gray-200 pb-6">
+      <section className="py-10 md:py-16 bg-white overflow-hidden">
+        <div className="container mx-auto px-6 mb-8 md:mb-12 flex flex-col md:flex-row justify-between items-end border-b border-gray-200 pb-6">
             <div><span className="text-gray-400 uppercase tracking-[0.2em] text-xs font-bold mb-2 block">Selected Works</span><h3 className="text-4xl font-bold text-black">Ultimi Progetti</h3></div>
             <Link to="/projects" className="hidden md:block text-xs uppercase tracking-widest border border-black px-8 py-4 text-black hover:bg-black hover:text-white transition-all">Vedi Tutti</Link>
          </div>

@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\PortfolioController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\AdminProjectController;
+use App\Http\Controllers\Api\ContactController;
 
 // Rotte pubbliche
 Route::get('/projects', [PortfolioController::class, 'index']);
@@ -28,3 +29,4 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/admin/projects/{id}', [AdminProjectController::class, 'update']); // Per form-data con PUT
     Route::delete('/admin/projects/{id}', [AdminProjectController::class, 'destroy']);
 });
+Route::post('/contact', [ContactController::class, 'send']);

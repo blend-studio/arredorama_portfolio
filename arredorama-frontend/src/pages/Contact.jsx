@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import axios from 'axios'; // Assicurati di aver fatto 'npm install axios'
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -34,14 +35,26 @@ const Contact = () => {
       return;
     }
 
-    // Simula invio (sostituire con chiamata API reale)
     try {
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      // Chiamata all'API Laravel
+      // Nota: In produzione dovresti usare una variabile d'ambiente come import.meta.env.VITE_API_URL
+      await axios.post('http://127.0.0.1:8000/api/contact', formData);
+
       setStatus({ type: 'success', message: 'Messaggio inviato con successo! Ti ricontatteremo presto.' });
+      
+      // Resetta il form
       setFormData({ name: '', email: '', phone: '', service: '', budget: '', message: '' });
+      
     } catch (err) {
-      setStatus({ type: 'error', message: 'Errore durante l\'invio. Riprova più tardi.' });
+      console.error("Errore invio form:", err);
+      // Gestione errori più dettagliata se il server risponde con errori di validazione
+      if (err.response && err.response.data && err.response.data.message) {
+         setStatus({ type: 'error', message: err.response.data.message });
+      } else {
+         setStatus({ type: 'error', message: 'Errore durante l\'invio. Riprova più tardi.' });
+      }
     }
+    
     setLoading(false);
   };
 
@@ -87,16 +100,16 @@ const Contact = () => {
         <motion.div 
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mb-16 md:mb-24"
+          className="mb-12 md:mb-16 lg:mb-24"
         >
           <span className="text-[#ff5149] uppercase tracking-[0.2em] text-xs font-bold">Contattaci</span>
-          <h1 className="text-5xl md:text-7xl font-thin mt-2 tracking-tighter">Parliamo del<br/>tuo progetto.</h1>
+          <h1 className="text-5xl md:text-7xl font-bold mt-2 tracking-tighter">Parliamo del<br/>tuo progetto.</h1>
         </motion.div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 md:gap-24">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 md:gap-16 lg:gap-24">
           
           {/* Form */}
-          <motion.form 
+          <motion.form  
             onSubmit={handleSubmit}
             initial="hidden"
             animate="visible"

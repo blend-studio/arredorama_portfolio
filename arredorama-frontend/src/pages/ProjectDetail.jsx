@@ -192,7 +192,7 @@ const ProjectDetail = () => {
         {/* Immagine Principale con effetto Reveal */}
         <motion.div 
            variants={imageContainerVariants}
-           className="w-full h-[60vh] md:h-[80vh] overflow-hidden mb-20 bg-gray-100 relative"
+           className="w-full h-[50vh] md:h-[60vh] lg:h-[80vh] overflow-hidden mb-12 md:mb-20 bg-gray-100 relative"
         >
            <motion.img 
              variants={imageScaleVariants}
@@ -204,7 +204,7 @@ const ProjectDetail = () => {
         </motion.div>
 
         {/* Contenuto Dettagliato */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-24">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-16 lg:gap-24">
            <div className="md:col-span-1">
               <motion.div variants={itemVariants} className="border-t border-black pt-6 mb-8">
                  <span className="block text-xs uppercase text-gray-400 tracking-widest mb-1">Cliente</span>

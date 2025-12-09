@@ -124,7 +124,7 @@ const Projects = () => {
       <motion.div 
          initial={{ opacity: 0, y: -20 }}
          animate={{ opacity: 1, y: 0 }}
-         className="flex flex-col md:flex-row justify-between items-end mb-20 border-b border-gray-200 pb-8"
+         className="flex flex-col md:flex-row justify-between items-end mb-12 md:mb-20 border-b border-gray-200 pb-8"
       >
         <div>
            <span className="text-[#ff5149] uppercase tracking-[0.2em] text-xs font-bold">Lavori Selezionati</span>
@@ -132,7 +132,7 @@ const Projects = () => {
         </div>
         
         {/* Filtri */}
-        <div className="flex flex-wrap gap-8 mt-8 md:mt-0 justify-end">
+        <div className="flex flex-wrap gap-4 md:gap-8 mt-8 md:mt-0 justify-end">
           {categories.map(cat => (
             <button
               key={cat}
@@ -151,7 +151,7 @@ const Projects = () => {
       </motion.div>
 
       {/* Griglia Animata - animazioni più leggere */}
-      <motion.div layout className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
+      <motion.div layout className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10 lg:gap-12">
         <AnimatePresence mode="popLayout">
           {filtered.map((p, i) => (
             <motion.div
@@ -161,7 +161,7 @@ const Projects = () => {
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.9 }}
               transition={{ duration: 0.3 }}
-              className={`${i % 2 !== 0 ? 'md:mt-20' : ''}`}
+              className={`${i % 2 !== 0 ? 'md:mt-12 lg:mt-20' : ''}`}
             >
               <Link to={`/projects/${p.id}`} className="block group cursor-pointer relative">
                 <div className="overflow-hidden relative w-full aspect-[3/4] bg-gray-100">
