@@ -3,25 +3,36 @@ import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import axios from 'axios';
 
-// URL base del backend
-const API_BASE_URL = 'http://127.0.0.1:8000';
+// URL base del backend (personalizzabile da .env)
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://127.0.0.1:8000';
+const LOCAL_FALLBACK_URL = '/projects.json';
 
 // Fallback se il backend non è acceso (stessi dati di Projects.jsx per coerenza)
 const FALLBACK_PROJECTS = [
-    { id: 1, title: 'Cucina Monolite', category: 'Cucine', image_url: 'https://images.unsplash.com/photo-1556911220-e15b29be8c8f?q=80&w=2070' },
-    { id: 2, title: 'Living Sospeso', category: 'Living', image_url: 'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?q=80&w=1974' },
-    { id: 3, title: 'Suite Hotel', category: 'Notte', image_url: 'https://images.unsplash.com/photo-1616594039964-40891a909d72?q=80&w=2066' },
-    { id: 4, title: 'Bagno Marmo', category: 'Bagni', image_url: 'https://images.unsplash.com/photo-1600566752355-35792bedcfe1?q=80&w=2070' },
-    { id: 5, title: 'Lobby Minimal', category: 'Contract', image_url: 'https://images.unsplash.com/photo-1497366811353-6870744d04b2?q=80&w=2069' },
-    { id: 6, title: 'Isola White', category: 'Cucine', image_url: 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?q=80&w=2053' },
+  { id: 1, title: 'Cucina Monolite', category: 'Cucine', image_url: 'https://images.unsplash.com/photo-1556911220-e15b29be8c8f?q=80&w=2070' },
+  { id: 2, title: 'Living Sospeso', category: 'Living', image_url: 'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?q=80&w=1974' },
+  { id: 3, title: 'Suite Hotel', category: 'Notte', image_url: 'https://images.unsplash.com/photo-1616594039964-40891a909d72?q=80&w=2066' },
+  { id: 4, title: 'Bagno Marmo', category: 'Bagni', image_url: 'https://images.unsplash.com/photo-1600566752355-35792bedcfe1?q=80&w=2070' },
+  { id: 5, title: 'Lobby Minimal', category: 'Contract', image_url: 'https://images.unsplash.com/photo-1497366811353-6870744d04b2?q=80&w=2069' },
+  { id: 6, title: 'Isola White', category: 'Cucine', image_url: 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?q=80&w=2053' },
 ];
 
-const getImageUrl = (imageUrl) => {
-  if (!imageUrl) return '';
-  if (imageUrl.startsWith('http://') || imageUrl.startsWith('https://')) {
-    return imageUrl;
+// Import dinamico di tutte le immagini da src/assets
+const localImages = import.meta.glob('/src/assets/images/**/*.{png,jpg,jpeg,svg}', { eager: true });
+
+const normalizeImageUrl = (imageValue) => {
+  if (!imageValue) return '';
+  if (imageValue.startsWith('http://') || imageValue.startsWith('https://')) return imageValue;
+
+  // Prova a cercare l'immagine in src/assets
+  const localKey = `/src/assets${imageValue.startsWith('/') ? imageValue : '/' + imageValue}`;
+  
+  if (localImages[localKey]) {
+    return localImages[localKey].default;
   }
-  const cleanPath = imageUrl.startsWith('/') ? imageUrl : `/${imageUrl}`;
+
+  // Fallback al backend
+  const cleanPath = imageValue.startsWith('/') ? imageValue : `/${imageValue}`;
   return `${API_BASE_URL}${cleanPath}`;
 };
 
@@ -32,17 +43,34 @@ const ProjectDetail = () => {
 
   useEffect(() => {
     // Cerchiamo prima nel backend
-    axios.get(`${API_BASE_URL}/api/projects/${id}`)
-      .then(res => {
-        setProject(res.data);
+    const loadDetail = async () => {
+      try {
+        const { data } = await axios.get(`${API_BASE_URL}/api/projects/${id}`);
+        setProject(data);
         setLoading(false);
-      })
-      .catch(() => {
-        // Se fallisce, cerchiamo nei fallback
-        const found = FALLBACK_PROJECTS.find(p => p.id === parseInt(id));
-        setProject(found);
-        setLoading(false);
-      });
+        return;
+      } catch (err) {
+        console.log('Dettaglio backend non raggiungibile, provo i dati statici', err?.message);
+      }
+
+      try {
+        const { data } = await axios.get(LOCAL_FALLBACK_URL);
+        const found = Array.isArray(data) ? data.find(p => `${p.id}` === `${id}`) : null;
+        if (found) {
+          setProject(found);
+          setLoading(false);
+          return;
+        }
+      } catch (err) {
+        console.log('Fallback statico non disponibile, uso dati di emergenza', err?.message);
+      }
+
+      const found = FALLBACK_PROJECTS.find(p => p.id === parseInt(id));
+      setProject(found);
+      setLoading(false);
+    };
+
+    loadDetail();
   }, [id]);
 
   if (loading) return <div className="w-full h-screen flex items-center justify-center bg-white">Loading...</div>;
@@ -103,7 +131,7 @@ const ProjectDetail = () => {
       animate="visible"
       exit="hidden"
       variants={containerVariants}
-      className="w-full bg-white text-black pt-32 pb-20 relative"
+      className="w-full bg-white text-black pt-28 md:pt-32 pb-20 relative"
     >
       <div className="container mx-auto px-6 md:px-12">
         
@@ -123,9 +151,9 @@ const ProjectDetail = () => {
         >
            <motion.img 
              variants={imageScaleVariants}
-             src={getImageUrl(project.image_url)} 
+             src={normalizeImageUrl(project.image_url || project.image)} 
              alt={project.title} 
-             onError={(e) => { e.target.onerror = null; e.target.src = "https://via.placeholder.com/1200x800?text=No+Image"; }}
+             onError={(e) => { e.target.style.display = 'none'; }}
              className="w-full h-full object-cover" 
            />
         </motion.div>

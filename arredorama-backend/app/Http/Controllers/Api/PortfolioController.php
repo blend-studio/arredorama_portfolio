@@ -4,21 +4,34 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use App\Models\Project;
 use App\Models\Contact;
 
 class PortfolioController extends Controller
 {
     public function index() {
-        return response()->json(Project::all());
+        Log::info('PortfolioController: Loading all projects');
+        try {
+            return response()->json(Project::all());
+        } catch (\Exception $e) {
+            Log::error('PortfolioController: Error loading projects: ' . $e->getMessage());
+            return response()->json(['message' => 'Internal Server Error'], 500);
+        }
     }
 
     public function show($id) {
-        $project = Project::find($id);
-        if (!$project) {
-            return response()->json(['message' => 'Project not found'], 404);
+        try {
+            $project = Project::find($id);
+            if (!$project) {
+                Log::warning("PortfolioController: Project {$id} not found");
+                return response()->json(['message' => 'Project not found'], 404);
+            }
+            return response()->json($project);
+        } catch (\Exception $e) {
+            Log::error("PortfolioController: Error loading project {$id}: " . $e->getMessage());
+            return response()->json(['message' => 'Internal Server Error'], 500);
         }
-        return response()->json($project);
     }
 
     public function storeContact(Request $request) {

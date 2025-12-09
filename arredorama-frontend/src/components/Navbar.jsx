@@ -27,7 +27,7 @@ const Navbar = () => {
   return (
     <>
       {/* NAVBAR FISSA - mix-blend-difference assicura che si veda SEMPRE */}
-      <nav className="fixed top-0 left-0 w-full z-[100] py-8 px-6 md:px-12 flex justify-between items-center mix-blend-difference text-white">
+      <nav className="fixed top-0 left-0 w-full z-[100] py-6 px-4 sm:px-6 md:py-8 md:px-12 flex justify-between items-center mix-blend-difference text-white">
         
         {/* LOGO */}
         <Link to="/" className="relative z-[100]">
@@ -59,7 +59,7 @@ const Navbar = () => {
             animate={{ clipPath: "circle(150% at 100% 0%)" }}
             exit={{ clipPath: "circle(0% at 100% 0%)" }}
             transition={{ duration: 0.7, ease: [0.77, 0, 0.175, 1] }}
-            className="fixed inset-0 bg-[#0a0a0a] text-white z-[90] flex flex-col justify-center px-12 md:px-32"
+            className="fixed inset-0 bg-[#0a0a0a] text-white z-[90] flex flex-col justify-center px-8 sm:px-12 md:px-32"
           >
             <div className="flex flex-col gap-2">
               {menuItems.map((item, index) => (
