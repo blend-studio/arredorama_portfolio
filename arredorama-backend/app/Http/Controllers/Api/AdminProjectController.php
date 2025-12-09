@@ -35,6 +35,7 @@ class AdminProjectController extends Controller
                 'year' => 'nullable|string|max:10',
                 // l'immagine può essere file o stringa (già presente): valida solo se è un file caricato
                 'image' => 'nullable',
+                'gallery.*' => 'image|max:5120', // Validazione per ogni file della gallery
             ];
 
             if ($request->hasFile('image')) {
@@ -71,6 +72,32 @@ class AdminProjectController extends Controller
                 // Percorso salvato in DB
                 $validated['image'] = '/images/' . $filename;
             }
+
+            // Gestione Gallery
+            $galleryPaths = [];
+            if ($request->hasFile('gallery')) {
+                $files = $request->file('gallery');
+                foreach ($files as $file) {
+                    $filename = time() . '_' . uniqid() . '_' . $file->getClientOriginalName();
+                    
+                    // Backend: salva in public/images
+                    $targetDir = public_path('images');
+                    File::ensureDirectoryExists($targetDir);
+                    $file->move($targetDir, $filename);
+
+                    // Copia anche nel frontend per la modalità statica
+                    $frontendDir = base_path('../arredorama-frontend/src/assets/images/ARREDORAMA-SMALL');
+                    File::ensureDirectoryExists($frontendDir);
+                    $backendPath = $targetDir . DIRECTORY_SEPARATOR . $filename;
+                    $frontendPath = $frontendDir . DIRECTORY_SEPARATOR . $filename;
+                    if (file_exists($backendPath)) {
+                        @copy($backendPath, $frontendPath);
+                    }
+
+                    $galleryPaths[] = '/images/' . $filename;
+                }
+            }
+            $validated['gallery'] = $galleryPaths;
 
             // Copia il path anche su image_url (colonna esistente non nullable)
             $validated['image_url'] = $validated['image'] ?? '';
@@ -131,6 +158,9 @@ class AdminProjectController extends Controller
                 'location' => 'nullable|string|max:255',
                 'year' => 'nullable|string|max:10',
                 'image' => 'nullable',
+                'gallery.*' => 'image|max:5120',
+                'existing_gallery' => 'nullable|array',
+                'existing_gallery.*' => 'string',
             ];
 
             if ($request->hasFile('image')) {
@@ -173,6 +203,49 @@ class AdminProjectController extends Controller
 
                 $validated['image'] = '/images/' . $filename;
             }
+
+            // Gestione Gallery
+            // 1. Recupera immagini esistenti da mantenere
+            $existingGallery = $request->input('existing_gallery', []);
+            
+            // 2. Identifica immagini rimosse per cancellarle dal disco
+            $currentGallery = $project->gallery ?? [];
+            $removedImages = array_diff($currentGallery, $existingGallery);
+            
+            foreach ($removedImages as $removedPath) {
+                $absolutePath = public_path(ltrim($removedPath, '/'));
+                if (file_exists($absolutePath)) {
+                    @unlink($absolutePath);
+                }
+                // Nota: non cancelliamo dal frontend assets folder per sicurezza/semplicità, 
+                // ma idealmente dovremmo farlo se vogliamo pulizia completa.
+            }
+
+            // 3. Aggiungi nuove immagini
+            $newGalleryPaths = [];
+            if ($request->hasFile('gallery')) {
+                $files = $request->file('gallery');
+                foreach ($files as $file) {
+                    $filename = time() . '_' . uniqid() . '_' . $file->getClientOriginalName();
+                    
+                    $targetDir = public_path('images');
+                    File::ensureDirectoryExists($targetDir);
+                    $file->move($targetDir, $filename);
+
+                    $frontendDir = base_path('../arredorama-frontend/src/assets/images/ARREDORAMA-SMALL');
+                    File::ensureDirectoryExists($frontendDir);
+                    $backendPath = $targetDir . DIRECTORY_SEPARATOR . $filename;
+                    $frontendPath = $frontendDir . DIRECTORY_SEPARATOR . $filename;
+                    if (file_exists($backendPath)) {
+                        @copy($backendPath, $frontendPath);
+                    }
+
+                    $newGalleryPaths[] = '/images/' . $filename;
+                }
+            }
+
+            // 4. Unisci esistenti mantenute + nuove
+            $validated['gallery'] = array_merge($existingGallery, $newGalleryPaths);
 
             // Mantieni image_url allineato (colonna esistente non nullable)
             if ($request->hasFile('image')) {

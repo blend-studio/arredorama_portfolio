@@ -228,6 +228,29 @@ const ProjectDetail = () => {
            </div>
         </div>
 
+        {/* Gallery Section */}
+        {project.gallery && project.gallery.length > 0 && (
+          <motion.div variants={containerVariants} className="mt-24 md:mt-32">
+            <motion.h3 variants={itemVariants} className="text-2xl font-light mb-12">Galleria Immagini</motion.h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              {project.gallery.map((img, index) => (
+                <motion.div 
+                  key={index} 
+                  variants={itemVariants}
+                  className="w-full h-[40vh] md:h-[50vh] bg-gray-100 overflow-hidden"
+                >
+                  <img 
+                    src={normalizeImageUrl(img)} 
+                    alt={`${project.title} - Gallery ${index + 1}`} 
+                    className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
+                    loading="lazy"
+                  />
+                </motion.div>
+              ))}
+            </div>
+          </motion.div>
+        )}
+
       </div>
     </motion.div>
   );

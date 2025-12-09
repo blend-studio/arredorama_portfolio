@@ -15,5 +15,10 @@ class Project extends Model
         'year',
         'image',
         'image_url',
+        'gallery',
+    ];
+
+    protected $casts = [
+        'gallery' => 'array',
     ];
 }

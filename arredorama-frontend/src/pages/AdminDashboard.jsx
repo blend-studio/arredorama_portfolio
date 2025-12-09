@@ -38,8 +38,10 @@ const AdminDashboard = () => {
     location: '',
     year: '',
     image: null,
+    // gallery: [], // Rimosso, gestito via galleryItems
   });
   const [imagePreview, setImagePreview] = useState(null);
+  const [galleryItems, setGalleryItems] = useState([]); // { type: 'existing'|'new', url: string, file?: File, path?: string }
   const [saving, setSaving] = useState(false);
   const [deleteConfirm, setDeleteConfirm] = useState(null);
 
@@ -213,6 +215,18 @@ const AdminDashboard = () => {
         image: null,
       });
       setImagePreview(project.image ? getImageUrl(project.image) : null);
+      
+      // Gestione gallery esistente
+      if (project.gallery && Array.isArray(project.gallery)) {
+        setGalleryItems(project.gallery.map((path, idx) => ({
+          id: `existing-${idx}`,
+          type: 'existing',
+          url: getImageUrl(path),
+          path: path
+        })));
+      } else {
+        setGalleryItems([]);
+      }
     } else {
       setEditingProject(null);
       setFormData({
@@ -225,6 +239,7 @@ const AdminDashboard = () => {
         image: null,
       });
       setImagePreview(null);
+      setGalleryItems([]);
     }
     setShowModal(true);
   };
@@ -242,6 +257,7 @@ const AdminDashboard = () => {
       image: null,
     });
     setImagePreview(null);
+    setGalleryItems([]);
   };
 
   const handleInputChange = (e) => {
@@ -255,6 +271,39 @@ const AdminDashboard = () => {
       setFormData((prev) => ({ ...prev, image: file }));
       setImagePreview(URL.createObjectURL(file));
     }
+  };
+
+  const handleGalleryChange = (e) => {
+    const files = Array.from(e.target.files);
+    if (files.length > 0) {
+      const newItems = files.map((file, idx) => ({
+        id: `new-${Date.now()}-${idx}`,
+        type: 'new',
+        url: URL.createObjectURL(file),
+        file: file
+      }));
+      setGalleryItems((prev) => [...prev, ...newItems]);
+    }
+    // Reset input value to allow selecting the same file again if needed
+    e.target.value = '';
+  };
+
+  const handleRemoveGalleryItem = (indexToRemove) => {
+    setGalleryItems((prev) => prev.filter((_, idx) => idx !== indexToRemove));
+  };
+
+  const handleReplaceGalleryItem = (index, file) => {
+    const newUrl = URL.createObjectURL(file);
+    setGalleryItems((prev) => {
+      const newItems = [...prev];
+      newItems[index] = {
+        id: `new-${Date.now()}-${Math.random()}`,
+        type: 'new',
+        url: newUrl,
+        file: file
+      };
+      return newItems;
+    });
   };
 
   const handleSubmit = async (e) => {
@@ -277,10 +326,45 @@ const AdminDashboard = () => {
       if (formData.image) {
         form.append('image', formData.image);
       }
+      
+      // Gestione Gallery
+      // 1. Immagini esistenti da mantenere
+      const existingPaths = galleryItems
+        .filter(item => item.type === 'existing')
+        .map(item => item.path);
+      
+      existingPaths.forEach(path => {
+        form.append('existing_gallery[]', path);
+      });
+
+      // 2. Nuove immagini da caricare
+      const newFiles = galleryItems
+        .filter(item => item.type === 'new')
+        .map(item => item.file);
+        
+      newFiles.forEach((file) => {
+        form.append('gallery[]', file);
+      });
+
+      // Se stiamo modificando e non ci sono immagini esistenti, inviamo un flag o array vuoto
+      // Nota: FormData non invia array vuoti. Se existing_gallery[] non è presente, il backend deve assumere che sia vuoto?
+      // No, se non è presente, il backend potrebbe pensare "non aggiornare".
+      // Ma qui stiamo facendo una POST/PUT completa.
+      // Aggiungiamo un campo hidden per forzare l'invio se vuoto?
+      // In PHP $request->input('existing_gallery', []) funzionerà se non c'è.
+      // Ma dobbiamo essere sicuri che il backend capisca l'intenzione.
+      // Se inviamo 'existing_gallery' come stringa vuota se vuoto? No.
+      // Inviamo un valore dummy se vuoto? No.
+      // Semplicemente, se l'array è vuoto, non appendiamo nulla. Il backend riceverà null/empty.
 
       const url = editingProject
         ? `${API_BASE_URL}/api/admin/projects/${editingProject.id}`
         : `${API_BASE_URL}/api/admin/projects`;
+
+      // Per il metodo PUT/PATCH con FormData in Laravel/PHP, bisogna usare POST con _method
+      if (editingProject) {
+        form.append('_method', 'PUT');
+      }
 
       const response = await fetch(url, {
         method: 'POST',
@@ -495,7 +579,7 @@ const AdminDashboard = () => {
                 {/* Image Upload */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Immagine
+                    Immagine di Copertina
                   </label>
                   <div className="flex items-start gap-4">
                     <div className="w-32 h-24 bg-gray-100 rounded-lg overflow-hidden flex-shrink-0">
@@ -519,6 +603,69 @@ const AdminDashboard = () => {
                       <p className="text-xs text-gray-400 mt-2">JPG, PNG o WebP. Max 5MB.</p>
                     </div>
                   </div>
+                </div>
+
+                {/* Gallery Upload */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Galleria Immagini
+                  </label>
+                  <div className="mb-4">
+                    <input
+                      type="file"
+                      accept="image/*"
+                      multiple
+                      onChange={handleGalleryChange}
+                      className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-red-50 file:text-red-600 hover:file:bg-red-100"
+                    />
+                    <p className="text-xs text-gray-400 mt-2">Puoi selezionare più immagini contemporaneamente.</p>
+                  </div>
+                  
+                  {/* Gallery Preview Grid */}
+                  {galleryItems.length > 0 && (
+                    <div className="grid grid-cols-4 gap-2 mt-2">
+                      {galleryItems.map((item, idx) => (
+                        <div key={item.id} className="aspect-square bg-gray-100 rounded-lg overflow-hidden relative group">
+                          <img src={item.url} alt={`Gallery ${idx}`} className="w-full h-full object-cover" />
+                          
+                          {/* Edit Button */}
+                          <label className="absolute top-1 right-8 bg-blue-600 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer hover:bg-blue-700 shadow-sm" title="Sostituisci immagine">
+                            <input 
+                              type="file" 
+                              className="hidden" 
+                              accept="image/*"
+                              onChange={(e) => {
+                                if (e.target.files?.[0]) {
+                                  handleReplaceGalleryItem(idx, e.target.files[0]);
+                                }
+                              }}
+                            />
+                            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                            </svg>
+                          </label>
+
+                          {/* Remove Button */}
+                          <button
+                            type="button"
+                            onClick={() => handleRemoveGalleryItem(idx)}
+                            className="absolute top-1 right-1 bg-red-600 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-700 shadow-sm"
+                            title="Rimuovi immagine"
+                          >
+                            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                          </button>
+
+                          {item.type === 'new' && (
+                            <div className="absolute bottom-0 left-0 right-0 bg-green-500 text-white text-[10px] px-1 py-0.5 text-center opacity-75">
+                              Nuova
+                            </div>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
 
                 {/* Title & Category */}
