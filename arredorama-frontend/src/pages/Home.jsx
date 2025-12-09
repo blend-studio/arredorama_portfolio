@@ -41,6 +41,13 @@ const normalizeImageUrl = (imageValue) => {
   }
 
   const cleanPath = imageValue.startsWith('/') ? imageValue : `/${imageValue}`;
+
+  // Fix per GitHub Pages: se siamo in produzione e il path inizia con /images/,
+  // usiamo gli asset statici del frontend invece del backend
+  if (import.meta.env.PROD && cleanPath.startsWith('/images/')) {
+    return `${import.meta.env.BASE_URL}${cleanPath.substring(1)}`;
+  }
+
   return `${API_BASE_URL}${cleanPath}`;
 };
 
@@ -303,6 +310,17 @@ const Home = () => {
         }
       } catch (err) {
         console.log('Home: Impossibile caricare progetti dal backend:', err?.message);
+        // Fallback per GitHub Pages o quando il backend non è raggiungibile
+        try {
+          const fallbackUrl = `${import.meta.env.BASE_URL}projects.json`;
+          console.log('Tentativo caricamento fallback da:', fallbackUrl);
+          const { data: fallbackData } = await axios.get(fallbackUrl);
+          if (Array.isArray(fallbackData) && fallbackData.length > 0) {
+            setLatestProjects(fallbackData.slice(0, 6));
+          }
+        } catch (fallbackErr) {
+          console.log('Home: Impossibile caricare progetti di fallback:', fallbackErr?.message);
+        }
       }
     };
     loadProjects();
