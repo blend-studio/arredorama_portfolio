@@ -1,8 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence, useScroll, useTransform, useAnimation } from 'framer-motion';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 // --- COSTANTI ---
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://127.0.0.1:8000';
+
 const HERO_IMAGES = [
   "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?q=80&w=2053", 
   "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=2070", 
@@ -23,6 +26,23 @@ const INLINE_IMAGES = [
   "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?q=80&w=200", 
   "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=200"
 ];
+
+// Import dinamico di tutte le immagini da src/assets
+const localImages = import.meta.glob('/src/assets/images/**/*.{png,jpg,jpeg,svg}', { eager: true });
+
+const normalizeImageUrl = (imageValue) => {
+  if (!imageValue) return '';
+  if (imageValue.startsWith('http://') || imageValue.startsWith('https://')) return imageValue;
+
+  const localKey = `/src/assets${imageValue.startsWith('/') ? imageValue : '/' + imageValue}`;
+  
+  if (localImages[localKey]) {
+    return localImages[localKey].default;
+  }
+
+  const cleanPath = imageValue.startsWith('/') ? imageValue : `/${imageValue}`;
+  return `${API_BASE_URL}${cleanPath}`;
+};
 
 // --- COMPONENTI UI ---
 
@@ -83,13 +103,11 @@ const ServiceCardPinned = ({ service, index, total, scrollYProgress }) => {
   const start = step * index;
   const end = start + step;
 
-  // Animazioni: Y sale da sotto, X ruota da 45 a 0 (si raddrizza), Opacità entra
   const y = useTransform(scrollYProgress, [start, end], ['100vh', '0vh']);
   const rotateX = useTransform(scrollYProgress, [start, end], [45, 0]);
   const scale = useTransform(scrollYProgress, [start, end], [0.8, 1]);
   const opacity = useTransform(scrollYProgress, [start, start + (step * 0.5)], [0, 1]);
 
-  // La prima card è speciale: statica sul fondo, le altre arrivano sopra
   if (index === 0) {
     return (
       <div className="absolute inset-0 flex items-center justify-center bg-white" style={{ zIndex: index }}>
@@ -101,8 +119,7 @@ const ServiceCardPinned = ({ service, index, total, scrollYProgress }) => {
               <div className="w-12 h-[1px] bg-black mb-2.5 md:mb-6"></div>
               <p className="text-gray-400 font-light text-[0.9rem] md:text-base leading-relaxed">{service.longDesc}</p>
             </div>
-            {/* Immagine Pura senza overlay */}
-                <div className="relative h-[28vh] sm:h-[34vh] md:h-[60vh] w-full overflow-hidden shadow-none md:shadow-2xl rounded-sm">
+            <div className="relative h-[28vh] sm:h-[34vh] md:h-[60vh] w-full overflow-hidden shadow-none md:shadow-2xl rounded-sm">
                <img src={service.image} alt={service.title} className="w-full h-full object-cover" />
             </div>
         </div>
@@ -143,7 +160,7 @@ const ServicesScrollSection = () => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  const segmentHeight = isMobile ? 140 : 100; // più spazio di scroll su mobile per completare il blocco
+  const segmentHeight = isMobile ? 140 : 100;
 
   return (
     <section className="bg-white relative border-t border-gray-100">
@@ -154,7 +171,6 @@ const ServicesScrollSection = () => {
             <h2 className="text-3xl sm:text-4xl md:text-6xl font-bold text-black leading-tight">Diamo valore<br />ai tuoi spazi.</h2>
           </div>
           <div className="md:text-right">
-             {/* Link rimosso per richiesta */}
           </div>
         </div>
       </div>
@@ -173,17 +189,12 @@ const ServicesScrollSection = () => {
   );
 };
 
-// --- HOME PAGE COMPLETA ---
+// --- COMPONENTE SLIDER PROGETTI ---
 
-const Home = () => {
-  const [currentSlide, setCurrentSlide] = useState(0);
-  const { scrollYProgress } = useScroll();
-  const yParallax = useTransform(scrollYProgress, [0, 1], [0, -120]);
-  const scaleImage = useTransform(scrollYProgress, [0, 0.5], [1, 1.1]);
-  const textControls = useAnimation();
-
-  // Carousel Logic
+const ProjectSlider = ({ projects }) => {
+  const navigate = useNavigate();
   const [width, setWidth] = useState(0);
+  const [isDragging, setIsDragging] = useState(false);
   const carouselRef = useRef();
 
   useEffect(() => {
@@ -193,24 +204,105 @@ const Home = () => {
       }
     };
 
-    // Calcolo iniziale e listener per il resize
     updateWidth();
     window.addEventListener('resize', updateWidth);
-    
-    // Timeout per assicurarsi che il layout sia renderizzato correttamente
     const timer = setTimeout(updateWidth, 200);
 
     return () => {
       window.removeEventListener('resize', updateWidth);
       clearTimeout(timer);
     };
+  }, [projects]);
+
+  const handleDragStart = () => {
+    setIsDragging(true);
+  };
+
+  const handleDragEnd = () => {
+    setTimeout(() => setIsDragging(false), 100);
+  };
+
+  const handleCardClick = (projectId, e) => {
+    if (isDragging) {
+      e.preventDefault();
+      e.stopPropagation();
+      return;
+    }
+    navigate(`/projects/${projectId}`);
+  };
+
+  if (projects.length === 0) {
+    return (
+      <div className="min-w-[85vw] md:min-w-[40vw] lg:min-w-[30vw] h-[65vh] relative bg-gray-100 flex items-center justify-center">
+        <p className="text-gray-400">Caricamento progetti...</p>
+      </div>
+    );
+  }
+
+  return (
+    <motion.div ref={carouselRef} className="cursor-grab active:cursor-grabbing overflow-hidden">
+      <motion.div 
+        drag="x" 
+        dragConstraints={{ right: 0, left: -width }} 
+        dragElastic={0.1}
+        onDragStart={handleDragStart}
+        onDragEnd={handleDragEnd}
+        whileTap={{ cursor: "grabbing" }}
+        className="flex gap-8 select-none"
+      >
+        {projects.map((project) => (
+          <motion.div 
+            key={project.id} 
+            className="min-w-[85vw] md:min-w-[40vw] lg:min-w-[30vw] h-[65vh] relative group overflow-hidden cursor-pointer"
+            onClick={(e) => handleCardClick(project.id, e)}
+          >
+            <img 
+              src={normalizeImageUrl(project.image_url || project.image)} 
+              className="w-full h-full object-cover pointer-events-none select-none transform group-hover:scale-105 transition-transform duration-1000 ease-out" 
+              alt={project.title}
+              draggable={false}
+              onError={(e) => { e.target.style.display = 'none'; }}
+            />
+            <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-all duration-500 pointer-events-none"></div>
+            <div className="absolute bottom-8 left-8 pointer-events-none">
+              <h4 className="text-3xl font-bold text-white drop-shadow-lg">{project.title}</h4>
+              <span className="text-white/90 text-xs uppercase tracking-widest font-bold border-l-2 border-[#ff5149] pl-3">{project.category}</span>
+            </div>
+          </motion.div>
+        ))}
+      </motion.div>
+    </motion.div>
+  );
+};
+
+// --- HOME PAGE COMPLETA ---
+
+const Home = () => {
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const [latestProjects, setLatestProjects] = useState([]);
+  const { scrollYProgress } = useScroll();
+  const yParallax = useTransform(scrollYProgress, [0, 1], [0, -120]);
+  const scaleImage = useTransform(scrollYProgress, [0, 0.5], [1, 1.1]);
+  const textControls = useAnimation();
+
+  // Carica gli ultimi progetti dal DB
+  useEffect(() => {
+    const loadProjects = async () => {
+      try {
+        const { data } = await axios.get(`${API_BASE_URL}/api/projects`);
+        if (Array.isArray(data) && data.length > 0) {
+          setLatestProjects(data.slice(0, 6));
+        }
+      } catch (err) {
+        console.log('Home: Impossibile caricare progetti dal backend:', err?.message);
+      }
+    };
+    loadProjects();
   }, []);
 
   useEffect(() => {
     const sequence = async () => {
-      // Fase 1: L'immagine esce (sfondo bianco visibile) -> Testo diventa Nero
       await textControls.start({ color: "#1a1a1a", transition: { duration: 1.5, ease: "easeInOut" } });
-      // Fase 2: L'immagine entra (sfondo scuro copre) -> Testo diventa Bianco
       await textControls.start({ color: "#ffffff", transition: { duration: 1.5, ease: "easeInOut" } });
     };
     sequence();
@@ -222,10 +314,9 @@ const Home = () => {
   }, []);
 
   return (
-    // FIX: NESSUN overflow-hidden QUI. Questo permette allo sticky di funzionare.
     <div className="w-full bg-white text-[#1a1a1a] font-jost">
       
-      {/* 1. Hero (con overflow locale) */}
+      {/* 1. Hero */}
       <header className="relative min-h-[80vh] h-screen w-full overflow-hidden flex items-center justify-center">
         <AnimatePresence mode='wait'>
           <motion.div key={currentSlide} initial={{ opacity: 0, scale: 1.1 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0 }} transition={{ duration: 1.5 }} className="absolute inset-0 z-0">
@@ -255,7 +346,7 @@ const Home = () => {
           <span className="text-[#ff5149] uppercase tracking-[0.2em] text-xs font-bold mb-6 block">Philosophy</span>
           <h2 className="text-4xl md:text-5xl font-semibold leading-tight mb-8 text-black">Disporre gli spazi con <span className="font-serif italic">eleganza</span>, gusto e funzionalità.</h2>
           <div className="text-gray-500 text-lg font-light leading-relaxed mb-8 space-y-6">
-            <p>Arredorama si occupa da oltre trent’anni della fornitura di arredi, della progettazione e della realizzazione degli spazi interni relativamente ad abitazioni private e spazi commerciali.</p>
+            <p>Arredorama si occupa da oltre trent'anni della fornitura di arredi, della progettazione e della realizzazione degli spazi interni relativamente ad abitazioni private e spazi commerciali.</p>
             <p>Assistenza e consulenza nello studio delle esigenze di arredamento e nella scelta del prodotto ideale sono alla base del nostro lavoro.</p>
           </div>
           <Link to="/about" className="group inline-flex items-center gap-2 border-b border-black pb-1 uppercase text-xs tracking-widest hover:text-[#ff5149] hover:border-[#ff5149] transition-all">Scopri di più su di noi <span className="group-hover:translate-x-1 transition-transform">→</span></Link>
@@ -281,7 +372,7 @@ const Home = () => {
         </div>
       </section>
 
-      {/* 5. Preview - Draggable Slider */}
+      {/* 5. Preview - Draggable Slider con progetti dal DB */}
       <section className="py-20 md:py-32 bg-white overflow-hidden">
         <div className="container mx-auto px-6 mb-12 md:mb-16 flex flex-col md:flex-row justify-between items-end border-b border-gray-200 pb-6">
             <div><span className="text-gray-400 uppercase tracking-[0.2em] text-xs font-bold mb-2 block">Selected Works</span><h3 className="text-4xl font-bold text-black">Ultimi Progetti</h3></div>
@@ -289,31 +380,7 @@ const Home = () => {
          </div>
          
          <div className='pl-6 md:pl-20'>
-            <motion.div ref={carouselRef} className="cursor-grab active:cursor-grabbing overflow-hidden">
-                <motion.div 
-                drag="x" 
-                dragConstraints={{ right: 0, left: -width }} 
-                whileTap={{ cursor: "grabbing" }}
-                className="flex gap-8"
-                >
-                {[
-                  {t: 'Villa sul Garda', c: 'Residenziale', img: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80'}, 
-                  {t: 'Boutique Milano', c: 'Commerciale', img: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?q=80'}, 
-                  {t: 'Loft Industrial', c: 'Living', img: 'https://images.unsplash.com/photo-1515263487990-61b07816b324?q=80'},
-                  {t: 'Penthouse Rome', c: 'Residenziale', img: 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?q=80'},
-                  {t: 'Uffici Tech', c: 'Commerciale', img: 'https://images.unsplash.com/photo-1497366216548-37526070297c?q=80'}
-                ].map((item, i) => (
-                    <motion.div key={i} className="min-w-[85vw] md:min-w-[40vw] lg:min-w-[30vw] h-[65vh] relative group overflow-hidden">
-                        <img src={item.img} className="w-full h-full object-cover pointer-events-none transform group-hover:scale-105 transition-transform duration-1000 ease-out" alt={item.t} />
-                        <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-all duration-500"></div>
-                        <div className="absolute bottom-8 left-8">
-                            <h4 className="text-3xl font-bold text-white drop-shadow-lg">{item.t}</h4>
-                            <span className="text-white/90 text-xs uppercase tracking-widest font-bold border-l-2 border-[#ff5149] pl-3">{item.c}</span>
-                        </div>
-                    </motion.div>
-                ))}
-                </motion.div>
-            </motion.div>
+            <ProjectSlider projects={latestProjects} />
          </div>
 
          <div className="mt-12 text-center md:hidden"><Link to="/projects" className="text-xs uppercase tracking-widest border border-black px-8 py-4 text-black hover:bg-black hover:text-white transition-all">Vedi Tutti i Progetti</Link></div>

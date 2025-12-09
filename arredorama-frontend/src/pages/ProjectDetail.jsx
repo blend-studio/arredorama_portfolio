@@ -40,19 +40,31 @@ const ProjectDetail = () => {
   const { id } = useParams();
   const [project, setProject] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  // Scroll to top quando cambia l'id del progetto
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [id]);
 
   useEffect(() => {
-    // Cerchiamo prima nel backend
     const loadDetail = async () => {
+      setLoading(true);
+      setError(null);
+
+      // 1. Prima prova il backend
       try {
         const { data } = await axios.get(`${API_BASE_URL}/api/projects/${id}`);
-        setProject(data);
-        setLoading(false);
-        return;
+        if (data && data.id) {
+          setProject(data);
+          setLoading(false);
+          return;
+        }
       } catch (err) {
-        console.log('Dettaglio backend non raggiungibile, provo i dati statici', err?.message);
+        console.log('Dettaglio backend non raggiungibile:', err?.message);
       }
 
+      // 2. Se backend fallisce, prova i dati statici
       try {
         const { data } = await axios.get(LOCAL_FALLBACK_URL);
         const found = Array.isArray(data) ? data.find(p => `${p.id}` === `${id}`) : null;
@@ -62,19 +74,45 @@ const ProjectDetail = () => {
           return;
         }
       } catch (err) {
-        console.log('Fallback statico non disponibile, uso dati di emergenza', err?.message);
+        console.log('Fallback statico non disponibile:', err?.message);
       }
 
+      // 3. Solo come ultima risorsa usa i fallback hardcoded
       const found = FALLBACK_PROJECTS.find(p => p.id === parseInt(id));
-      setProject(found);
+      if (found) {
+        setProject(found);
+        setError('Dati di esempio. Il server non è raggiungibile.');
+      } else {
+        setProject(null);
+      }
       setLoading(false);
     };
 
     loadDetail();
   }, [id]);
 
-  if (loading) return <div className="w-full h-screen flex items-center justify-center bg-white">Loading...</div>;
-  if (!project) return <div className="w-full h-screen flex items-center justify-center bg-white">Progetto non trovato</div>;
+  // Loading state con spinner
+  if (loading) {
+    return (
+      <div className="w-full min-h-screen bg-white flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#ff5149] mx-auto mb-4"></div>
+          <p className="text-gray-500">Caricamento progetto...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!project) {
+    return (
+      <div className="w-full min-h-screen bg-white flex items-center justify-center">
+        <div className="text-center">
+          <h2 className="text-2xl font-light mb-4">Progetto non trovato</h2>
+          <Link to="/projects" className="text-[#ff5149] hover:underline">← Torna ai Progetti</Link>
+        </div>
+      </div>
+    );
+  }
 
   // Varianti per le animazioni
   const containerVariants = {
@@ -95,19 +133,19 @@ const ProjectDetail = () => {
       opacity: 1,
       transition: {
         duration: 0.8,
-        ease: [0.6, -0.05, 0.01, 0.99] // Custom ease (Bezier)
+        ease: [0.6, -0.05, 0.01, 0.99]
       }
     }
   };
 
   const imageContainerVariants = {
-    hidden: { clipPath: 'inset(10% 5% 10% 5%)', opacity: 0 }, // Parte più piccolo
+    hidden: { clipPath: 'inset(10% 5% 10% 5%)', opacity: 0 },
     visible: {
-      clipPath: 'inset(0% 0% 0% 0%)', // Si espande a tutto schermo
+      clipPath: 'inset(0% 0% 0% 0%)',
       opacity: 1,
       transition: {
         duration: 1.2,
-        ease: [0.6, 0.01, 0.05, 0.95], // Corrected bezier curve
+        ease: [0.6, 0.01, 0.05, 0.95],
         delay: 0.2
       }
     }
@@ -135,6 +173,13 @@ const ProjectDetail = () => {
     >
       <div className="container mx-auto px-6 md:px-12">
         
+        {/* Messaggio di errore se usa fallback */}
+        {error && (
+          <div className="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded mb-6">
+            {error}
+          </div>
+        )}
+
         {/* Header Progetto */}
         <div className="mb-12">
            <motion.div variants={itemVariants}>
@@ -163,42 +208,24 @@ const ProjectDetail = () => {
            <div className="md:col-span-1">
               <motion.div variants={itemVariants} className="border-t border-black pt-6 mb-8">
                  <span className="block text-xs uppercase text-gray-400 tracking-widest mb-1">Cliente</span>
-                 <span className="font-medium text-lg">Privato</span>
+                 <span className="font-medium text-lg">{project.client || 'Privato'}</span>
               </motion.div>
               <motion.div variants={itemVariants} className="border-t border-gray-200 pt-6 mb-8">
                  <span className="block text-xs uppercase text-gray-400 tracking-widest mb-1">Anno</span>
-                 <span className="font-medium text-lg">2024</span>
+                 <span className="font-medium text-lg">{project.year || '2024'}</span>
               </motion.div>
               <motion.div variants={itemVariants} className="border-t border-gray-200 pt-6 mb-8">
                  <span className="block text-xs uppercase text-gray-400 tracking-widest mb-1">Servizi</span>
-                 <span className="font-medium text-lg">Interior Design, Lighting</span>
+                 <span className="font-medium text-lg">{project.services || 'Interior Design, Lighting'}</span>
               </motion.div>
            </div>
 
            <div className="md:col-span-2">
               <motion.h2 variants={itemVariants} className="text-3xl font-light mb-8 leading-tight">Il concept del progetto</motion.h2>
               <motion.div variants={itemVariants} className="text-gray-600 font-light text-lg leading-relaxed space-y-6">
-                 <p>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                 </p>
-                 <p>
-                    Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                 </p>
-                 <p>
-                    Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.
-                 </p>
+                 <p>{project.description || 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'}</p>
               </motion.div>
            </div>
-        </div>
-
-        {/* Altre Immagini */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-20">
-           <motion.div variants={itemVariants} className="h-[50vh] bg-gray-100 overflow-hidden">
-              <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=1200" className="w-full h-full object-cover hover:scale-105 transition-transform duration-700" alt="Detail 1" />
-           </motion.div>
-           <motion.div variants={itemVariants} className="h-[50vh] bg-gray-100 overflow-hidden">
-              <img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?q=80&w=1200" className="w-full h-full object-cover hover:scale-105 transition-transform duration-700" alt="Detail 2" />
-           </motion.div>
         </div>
 
       </div>
