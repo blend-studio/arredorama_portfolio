@@ -87,7 +87,7 @@ const AdminLogin = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center px-4">
+    <div className="min-h-screen bg-gray-100 flex items-center justify-center px-4 font-jost">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -96,11 +96,9 @@ const AdminLogin = () => {
       >
         {/* Logo */}
         <div className="text-center mb-8">
-          <img
-            src="https://www.arredorama.it/wp-content/uploads/2019/02/logo-arredorama.png"
-            alt="Arredorama"
-            className="h-12 mx-auto mb-4"
-          />
+          <span className="text-3xl font-bold text-[#00b7cd] tracking-widest block mb-4">
+            ARREDORAMA
+          </span>
           <h1 className="text-2xl font-bold text-gray-800">Area Riservata</h1>
           <p className="text-gray-500 mt-2">Accedi per gestire i progetti</p>
         </div>
@@ -128,7 +126,7 @@ const AdminLogin = () => {
               value={formData.email}
               onChange={handleChange}
               required
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all"
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#00b7cd] focus:border-transparent transition-all"
               placeholder="admin@arredorama.it"
             />
           </div>
@@ -144,7 +142,7 @@ const AdminLogin = () => {
               value={formData.password}
               onChange={handleChange}
               required
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all"
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#00b7cd] focus:border-transparent transition-all"
               placeholder="••••••••"
             />
           </div>
@@ -152,7 +150,7 @@ const AdminLogin = () => {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-red-600 text-white py-3 rounded-lg font-semibold hover:bg-red-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full bg-[#00b7cd] text-white py-3 rounded-lg font-semibold hover:bg-[#0090a1] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {loading ? (
               <span className="flex items-center justify-center gap-2">
@@ -170,7 +168,7 @@ const AdminLogin = () => {
 
         {/* Link ritorno */}
         <div className="mt-6 text-center">
-          <a href="/" className="text-gray-500 hover:text-red-600 text-sm transition-colors">
+          <a href="/" className="text-gray-500 hover:text-[#00b7cd] text-sm transition-colors">
             ← Torna al sito
           </a>
         </div>

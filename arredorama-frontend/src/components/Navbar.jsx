@@ -76,7 +76,7 @@ const Navbar = () => {
                       to={item.path} 
                       className={`tracking-tight hover:text-gray-400 transition-colors block ${
                         item.title === 'Area Riservata' 
-                          ? 'text-2xl md:text-4xl font-normal text-red-500 hover:text-red-400 mt-8' 
+                          ? 'text-2xl md:text-4xl font-normal text-[#00b7cd] hover:text-[#0090a1] mt-8' 
                           : 'text-5xl md:text-8xl font-thin'
                       }`}
                     >

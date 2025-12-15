@@ -422,16 +422,15 @@ const AdminDashboard = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen bg-gray-100 font-jost">
       {/* Header */}
       <header className="bg-white shadow-sm">
         <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <img
-              src="https://www.arredorama.it/wp-content/uploads/2019/02/logo-arredorama.png"
-              alt="Arredorama"
-              className="h-8"
-            />
+            <span className="text-2xl font-bold text-[#00b7cd] tracking-widest">
+              ARREDORAMA
+            </span>
+            <div className="h-6 w-px bg-gray-300"></div>
             <h1 className="text-xl font-bold text-gray-800">Dashboard Admin</h1>
           </div>
           <div className="flex items-center gap-4">
