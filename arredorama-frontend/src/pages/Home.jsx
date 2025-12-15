@@ -117,16 +117,16 @@ const ServiceCardPinned = ({ service, index, total, scrollYProgress }) => {
 
   if (index === 0) {
     return (
-      <div className="absolute inset-0 flex items-start justify-center bg-white pt-12 md:pt-32" style={{ zIndex: index }}>
+      <div className="absolute inset-0 flex items-start justify-center bg-white pt-6 md:pt-32" style={{ zIndex: index }}>
         <div className="container mx-auto px-5 sm:px-6 md:px-12 grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-start pt-2 md:pt-0">
             <div className="md:pr-6 lg:pr-12 bg-white md:bg-transparent backdrop-blur-sm md:backdrop-blur-none p-2.5 rounded-xl md:p-0 z-20">
-              <span className="text-[#00b7cd] text-[1.85rem] sm:text-5xl md:text-7xl lg:text-9xl font-bold opacity-20 block mt-3 mb-1 -ml-1">{service.num}</span>
+              <span className="text-[#00b7cd] text-[1.85rem] sm:text-4xl md:text-5xl xl:text-9xl font-bold opacity-20 block mt-3 mb-1 -ml-1 md:-ml-2 lg:-ml-1 xl:-ml-2">{service.num}</span>
               <h3 className="text-[1.3rem] sm:text-[1.85rem] md:text-4xl lg:text-6xl font-bold text-black mb-2.5 md:mb-7 leading-tight">{service.title}</h3>
               <p className="text-gray-600 font-light text-[0.92rem] sm:text-base md:text-lg lg:text-xl leading-relaxed mb-2.5 md:mb-6">{service.description}</p>
               <div className="w-12 h-[1px] bg-black mb-2.5 md:mb-6"></div>
               <p className="text-gray-400 font-light text-[0.9rem] md:text-sm lg:text-base leading-relaxed">{service.longDesc}</p>
             </div>
-            <div className="relative h-[28vh] sm:h-[34vh] md:h-[45vh] lg:h-[60vh] w-full overflow-hidden shadow-none md:shadow-2xl rounded-sm">
+            <div className="relative h-[40vh] sm:h-[45vh] md:h-[55vh] lg:h-[60vh] w-full overflow-hidden shadow-none md:shadow-2xl rounded-sm">
                <img src={service.image} alt={service.title} className="w-full h-full object-cover" />
             </div>
         </div>
@@ -137,17 +137,17 @@ const ServiceCardPinned = ({ service, index, total, scrollYProgress }) => {
   return (
     <motion.div 
       style={{ y, rotateX, scale, opacity, zIndex: index + 1, transformPerspective: 1000 }}
-      className="absolute inset-0 flex items-start justify-center bg-white origin-bottom pt-12 md:pt-32"
+      className="absolute inset-0 flex items-start justify-center bg-white origin-bottom pt-6 md:pt-32"
     >
       <div className="container mx-auto px-6 md:px-12 grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-start pt-2 md:pt-0">
           <div className="md:pr-6 lg:pr-12 bg-white md:bg-transparent backdrop-blur-sm md:backdrop-blur-none p-2.5 rounded-xl md:p-0 z-20">
-            <span className="text-[#00b7cd] text-[1.85rem] sm:text-5xl md:text-7xl lg:text-9xl font-bold opacity-20 block mt-3 mb-1 -ml-2">{service.num}</span>
+            <span className="text-[#00b7cd] text-[1.85rem] sm:text-4xl md:text-5xl xl:text-9xl font-bold opacity-20 block mt-3 mb-1 -ml-2 md:-ml-3 lg:-ml-2 xl:-ml-3">{service.num}</span>
             <h3 className="text-[1.3rem] sm:text-[1.85rem] md:text-4xl lg:text-6xl font-bold text-black mb-2.5 md:mb-7 leading-tight">{service.title}</h3>
             <p className="text-gray-600 font-light text-[0.92rem] sm:text-base md:text-lg lg:text-xl leading-relaxed mb-2.5 md:mb-6">{service.description}</p>
             <div className="w-12 h-[1px] bg-black mb-2.5 md:mb-6"></div>
             <p className="text-gray-400 font-light text-[0.9rem] md:text-sm lg:text-base leading-relaxed">{service.longDesc}</p>
           </div>
-           <div className="relative h-[28vh] sm:h-[34vh] md:h-[45vh] lg:h-[60vh] w-full overflow-hidden shadow-none md:shadow-2xl rounded-sm">
+           <div className="relative h-[40vh] sm:h-[45vh] md:h-[55vh] lg:h-[60vh] w-full overflow-hidden shadow-none md:shadow-2xl rounded-sm">
              <img src={service.image} alt={service.title} className="w-full h-full object-cover" />
           </div>
       </div>
