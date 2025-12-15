@@ -22,6 +22,7 @@ const Navbar = () => {
     { title: 'Projects', path: '/projects' },
     { title: 'Brands', path: '/brands' },
     { title: 'Contact', path: '/contact' },
+    { title: 'Showroom', path: '/showroom' },
     { title: 'Area Riservata', path: '/admin' }
   ];
 
