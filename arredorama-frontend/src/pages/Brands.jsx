@@ -2,14 +2,24 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 
-// Dati placeholder per i brand (da sostituire con i tuoi loghi/immagini reali)
-const BRANDS_DATA = [
-  { id: 1, name: "Poliform", category: "Living & Kitchens", image: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?q=80&w=800" },
-  { id: 2, name: "Minotti", category: "Sofas & Armchairs", image: "https://images.unsplash.com/photo-1567016432779-094069958ea5?q=80&w=800" },
-  { id: 3, name: "B&B Italia", category: "Contemporary Design", image: "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?q=80&w=800" },
-  { id: 4, name: "Flos", category: "Lighting", image: "https://images.unsplash.com/photo-1513506003901-1e6a229e2d15?q=80&w=800" },
-  { id: 5, name: "Molteni&C", category: "Furniture", image: "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?q=80&w=800" },
-  { id: 6, name: "Artemide", category: "Lighting Design", image: "https://images.unsplash.com/photo-1507473888900-52e1adad5420?q=80&w=800" },
+// IMPORT LOGHI PARTNER (nomi reali trovati in src/assets/images/PARTNERS)
+import boffiLogo from '../assets/images/PARTNERS/BOFFI-arredorama.png';
+import flosLogo from '../assets/images/PARTNERS/flos-arredorama.png';
+import foscariniLogo from '../assets/images/PARTNERS/foscarini-arredorama.png';
+import kartellLogo from '../assets/images/PARTNERS/logo-kartell-arredorama.png';
+import occhioLogo from '../assets/images/PARTNERS/occhio-arredorama.png';
+import rimadesioLogo from '../assets/images/PARTNERS/rimadesio-arredorama.png';
+import vitraLogo from '../assets/images/PARTNERS/vitra-arredorama.png';
+
+// Array dei loghi per lo slider (usa i file reali)
+const PARTNER_LOGOS = [
+  boffiLogo,
+  flosLogo,
+  foscariniLogo,
+  kartellLogo,
+  occhioLogo,
+  rimadesioLogo,
+  vitraLogo
 ];
 
 const Brands = () => {
@@ -36,42 +46,60 @@ const Brands = () => {
         </motion.div>
       </section>
 
-      {/* Griglia Brand */}
-      <section className="container mx-auto px-6 md:px-12 lg:px-20 pb-24">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {BRANDS_DATA.map((brand, index) => (
-            <motion.div
-              key={brand.id}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: index * 0.1, duration: 0.6 }}
-              className="group relative h-[400px] overflow-hidden cursor-pointer bg-gray-100"
-            >
-              {/* Immagine */}
-              <img 
-                src={brand.image} 
-                alt={brand.name} 
-                className="w-full h-full object-cover transition-transform duration-1000 ease-out group-hover:scale-110"
-              />
-              
-              {/* Overlay scuro */}
-              <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-all duration-500"></div>
-
-              {/* Testo */}
-              <div className="absolute bottom-0 left-0 p-8 w-full">
-                <div className="overflow-hidden">
-                  <h3 className="text-3xl font-bold text-white mb-1 transform translate-y-0 transition-transform duration-500">
-                    {brand.name}
-                  </h3>
-                </div>
-                <p className="text-white/80 text-xs uppercase tracking-widest font-medium border-l-2 border-[#00b7cd] pl-3">
-                  {brand.category}
-                </p>
+      {/* Slider Loghi Partner (Marquee) - sfondo scuro e loghi più grandi */}
+      <section className="w-full overflow-hidden bg-black py-16 mb-24 border-y border-gray-900">
+          <div className="container mx-auto px-6 mb-8 text-center">
+            <p className="text-base md:text-lg lg:text-xl font-extrabold uppercase tracking-wide text-gray-300">I nostri partner ufficiali</p>
+          </div>
+        <div className="relative flex w-full">
+          <motion.div
+            className="flex items-center gap-20 md:gap-32 min-w-full pr-24 md:pr-32"
+            animate={{ x: ["0%", "-100%"] }}
+            transition={{ 
+              ease: "linear", 
+              duration: 30, 
+              repeat: Infinity 
+            }}
+          >
+            {/* Ripetiamo i loghi 4 volte per garantire un loop fluido su schermi larghi */}
+            {[...PARTNER_LOGOS, ...PARTNER_LOGOS, ...PARTNER_LOGOS, ...PARTNER_LOGOS].map((logo, index) => (
+              <div key={index} className="flex-shrink-0 h-16 md:h-24 w-auto opacity-80 hover:opacity-100 transition-all duration-500 cursor-pointer">
+                <img 
+                  src={logo} 
+                  alt={`Partner logo ${index}`} 
+                  className="h-full w-auto object-contain"
+                  onError={(e) => {e.target.style.display = 'none'}} // Nasconde l'immagine se non viene trovata
+                />
               </div>
-            </motion.div>
-          ))}
+            ))}
+          </motion.div>
         </div>
+      </section>
+
+      {/* Filosofia Aziendale (Testo da Arredorama.it) */}
+      <section className="container mx-auto px-6 md:px-12 lg:px-20 pb-24">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8 }}
+          className="bg-gray-50 p-8 md:p-16 rounded-sm text-center"
+        >
+            <h2 className="text-3xl md:text-4xl font-bold mb-8">Cinquant'anni di Esperienza</h2>
+            <div className="max-w-4xl mx-auto space-y-6 text-gray-600 text-lg leading-relaxed font-light">
+              <p>
+                Fondata da Giordano Bersani, l'azienda prosegue il suo cammino di successo con le idee e le intuizioni dei figli Lucia, Graziella, Mauro e Stefano. 
+                Al loro fianco uno staff di architetti, arredatori e designer di assoluto livello.
+              </p>
+              <p>
+                In uno spazio abitativo i particolari vanno scelti con stile ed eleganza e sono in grado di rivoluzionare il risultato finale: 
+                questa la filosofia dell'azienda, capace di donare ad ogni progetto un'impronta unica, anche grazie alla possibilità di personalizzare fino in fondo arredamenti, tessuti e tendaggi.
+              </p>
+              <p>
+                Arredare per noi non significa solo vendere prodotti, ma fornire servizi per progettare spazi funzionali che rispondono a precise esigenze tecniche ed estetiche.
+              </p>
+            </div>
+        </motion.div>
       </section>
 
       {/* CTA Footer */}

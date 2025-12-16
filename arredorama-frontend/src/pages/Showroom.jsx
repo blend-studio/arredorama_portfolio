@@ -1,5 +1,5 @@
-import React from 'react';
-import { motion } from 'framer-motion';
+import React, { useRef } from 'react';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import { Link } from 'react-router-dom';
 
 // Immagini placeholder (sostituisci con foto reali del tuo showroom)
@@ -11,6 +11,13 @@ const GALLERY_IMAGES = [
 ];
 
 const Showroom = () => {
+  const materiotecaRef = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: materiotecaRef,
+    offset: ["start end", "end start"]
+  });
+  const yParallax = useTransform(scrollYProgress, [0, 1], [-50, 50]);
+
   return (
     <div className="w-full bg-white text-[#1a1a1a] font-jost pt-24 md:pt-32">
       
@@ -48,7 +55,7 @@ const Showroom = () => {
               initial={{ opacity: 0, y: 50 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-50px" }}
-              transition={{ delay: index * 0.1, duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
+              transition={{ delay: index * 0.15, duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
               className={`relative group overflow-hidden ${img.span}`}
             >
               <motion.img 
@@ -65,7 +72,7 @@ const Showroom = () => {
       </section>
 
       {/* Sezione Materioteca (Dark Mode) */}
-      <section className="bg-[#1a1a1a] text-white py-20 md:py-32">
+      <section ref={materiotecaRef} className="bg-[#1a1a1a] text-white py-20 md:py-32 overflow-hidden">
         <div className="container mx-auto px-6 md:px-12 lg:px-20 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
            <motion.div 
              initial={{ opacity: 0, x: -50 }}
@@ -91,8 +98,58 @@ const Showroom = () => {
              transition={{ duration: 1.2, ease: [0.25, 1, 0.5, 1] }}
              className="h-[400px] md:h-[500px] bg-gray-800 rounded-sm overflow-hidden relative"
            >
-             <img src="https://images.unsplash.com/photo-1513161455079-7dc1de15ef3e?q=80&w=1000" className="w-full h-full object-cover opacity-90" alt="Materioteca" />
+             <motion.img style={{ y: yParallax }} src="https://images.unsplash.com/photo-1513161455079-7dc1de15ef3e?q=80&w=1000" className="w-full h-[120%] -mt-[10%] object-cover opacity-90" alt="Materioteca" />
            </motion.div>
+        </div>
+      </section>
+
+      {/* Virtual Tour */}
+      <section className="w-full bg-white py-20 md:py-32 border-b border-gray-100">
+        <div className="container mx-auto px-6 md:px-12 lg:px-20">
+           <motion.div 
+             initial={{ opacity: 0, y: 30 }}
+             whileInView={{ opacity: 1, y: 0 }}
+             viewport={{ once: true }}
+             transition={{ duration: 0.8 }}
+             className="text-center mb-12"
+           >
+             <span className="text-[#00b7cd] uppercase tracking-[0.2em] text-xs font-bold mb-4 block">Esplora lo Showroom</span>
+             <h2 className="text-3xl md:text-5xl font-bold mb-6 text-black">Virtual Tour 360°</h2>
+             <p className="text-gray-500 text-lg font-light max-w-3xl mx-auto">
+               Immergiti nei nostri spazi espositivi. Naviga tra le collezioni e scopri l'atmosfera unica del nostro showroom direttamente dal tuo dispositivo.
+             </p>
+           </motion.div>
+
+           <motion.div 
+             initial={{ opacity: 0, scale: 0.95 }}
+             whileInView={{ opacity: 1, scale: 1 }}
+             viewport={{ once: true }}
+             transition={{ duration: 0.8, delay: 0.2 }}
+             className="w-full h-[500px] md:h-[700px] bg-gray-100 rounded-sm overflow-hidden shadow-2xl relative showroom-map-container"
+           >
+             <iframe 
+               src="https://www.google.com/maps/embed?pb=!4v1765870432539!6m8!1m7!1sCAoSLEFGMVFpcE13QXV5eG1xVFNkY0NFVU5mZTd1WjlhVGV2dGJaTjNOS3hucUNM!2m2!1d45.00829249836222!2d9.872421407510842!3f206.24!4f-0.20999999999999375!5f0.7820865974627469"
+               className="showroom-map"
+               width="100%" 
+               height="100%" 
+               style={{ border: 0 }} 
+               allowFullScreen="" 
+               loading="lazy" 
+               referrerPolicy="no-referrer-when-downgrade"
+               title="Arredorama Virtual Tour"
+             ></iframe>
+           </motion.div>
+           
+           <div className="text-center mt-8">
+              <a 
+                href="https://www.google.com/maps/@45.0083284,9.8724459,3a,80y,206.24h,89.79t/data=!3m8!1e1!3m6!1sAF1QipPDsGU3ZM-Nve9rNOZaitOPgSWLZM-yIJnSzRIC!2e10!3e12!6shttps:%2F%2Flh3.googleusercontent.com%2Fp%2FAF1QipPDsGU3ZM-Nve9rNOZaitOPgSWLZM-yIJnSzRIC%3Dw900-h600-k-no-pi0.20999999999999375-ya355.3095495605469-ro0-fo100!7i13312!8i6656?entry=ttu" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="inline-block border-b border-black pb-1 text-xs uppercase tracking-widest font-bold hover:text-[#00b7cd] hover:border-[#00b7cd] transition-all"
+              >
+                Apri a schermo intero su Google Maps
+              </a>
+           </div>
         </div>
       </section>
 
@@ -130,7 +187,7 @@ const Showroom = () => {
            {/* Placeholder per Google Maps */}
            <iframe 
              title="Map"
-             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2798.3!2d9.1!3d45.4!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNDXCsDI0JzAwLjAiTiA5wrAwNiowMC4wIkU!5e0!3m2!1sit!2sit!4v1600000000000!5m2!1sit!2sit" 
+             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2805.0!2d9.8724459!3d45.0083284!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNDXCsDAwJzMwLjAiTiA5wrA1MicyMC44IkU!5e0!3m2!1sit!2sit" 
              width="100%" 
              height="100%" 
              style={{ border: 0, filter: 'grayscale(100%)' }} 

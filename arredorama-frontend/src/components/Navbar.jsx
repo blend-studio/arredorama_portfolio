@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Cursor } from './Cursor';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -21,6 +22,7 @@ const Navbar = () => {
     { title: 'About', path: '/about' },
     { title: 'Projects', path: '/projects' },
     { title: 'Brands', path: '/brands' },
+    { title: 'Spazio Delle Idee', path: '/spazio-idee' },
     { title: 'Contact', path: '/contact' },
     { title: 'Showroom', path: '/showroom' },
     { title: 'Area Riservata', path: '/admin' }
@@ -28,8 +30,16 @@ const Navbar = () => {
 
   return (
     <>
+      {/* Custom Cursor */}
+      <Cursor />
+
       {/* NAVBAR FISSA - mix-blend-difference assicura che si veda SEMPRE */}
-      <nav className="fixed top-0 left-0 w-full z-[100] py-6 px-4 sm:px-6 md:py-8 md:px-12 flex justify-between items-center mix-blend-difference text-white">
+      <motion.nav 
+        initial={{ y: -100, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+        className="fixed top-0 left-0 w-full z-[100] py-6 px-4 sm:px-6 md:py-8 md:px-12 flex justify-between items-center mix-blend-difference text-white"
+      >
         
         {/* LOGO */}
         <Link to="/" className="relative z-[100]">
@@ -51,7 +61,7 @@ const Navbar = () => {
             <span className={`block h-[2px] bg-white transition-all duration-300 ${isOpen ? 'w-8 -rotate-45 -translate-y-2.5' : 'w-4 group-hover:w-8'}`}></span>
           </button>
         </div>
-      </nav>
+      </motion.nav>
 
       {/* FULLSCREEN MENU OVERLAY (NERO) */}
       <AnimatePresence>
@@ -76,11 +86,17 @@ const Navbar = () => {
                       to={item.path} 
                       className={`tracking-tight hover:text-gray-400 transition-colors block ${
                         item.title === 'Area Riservata' 
-                          ? 'text-2xl md:text-4xl font-normal text-[#00b7cd] hover:text-[#0090a1] mt-8' 
-                          : 'text-5xl md:text-8xl font-thin'
+                          ? 'text-xl md:text-3xl font-normal text-[#00b7cd] hover:text-[#0090a1] mt-6' 
+                          : 'text-4xl md:text-6xl font-thin'
                       }`}
                     >
-                      {item.title}
+                      <motion.span 
+                        className="inline-block"
+                        whileHover={{ x: 20, skewX: -10 }}
+                        transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                      >
+                        {item.title}
+                      </motion.span>
                     </Link>
                   </motion.div>
                 </div>

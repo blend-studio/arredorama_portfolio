@@ -10,6 +10,7 @@ import AdminLogin from './pages/AdminLogin';
 import AdminDashboard from './pages/AdminDashboard';
 import Brands from './pages/Brands';
 import Showroom from './pages/Showroom';
+import SpazioIdee from './pages/SpazioIdee';
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
         <Route path="/projects" element={<Layout><Projects /></Layout>} />
         <Route path="/projects/:id" element={<Layout><ProjectDetail /></Layout>} />
         <Route path="/brands" element={<Layout><Brands /></Layout>} />
+        <Route path="/spazio-idee" element={<Layout><SpazioIdee /></Layout>} /> 
         <Route path="/showroom" element={<Layout><Showroom /></Layout>} />
         <Route path="/contact" element={<Layout><Contact /></Layout>} />
       </Routes>
