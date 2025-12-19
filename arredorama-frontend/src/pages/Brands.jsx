@@ -22,6 +22,25 @@ const PARTNER_LOGOS = [
   vitraLogo
 ];
 
+const BRAND_CATEGORIES = [
+  {
+    title: "Kitchen & Living",
+    brands: ["Boffi", "Poliform", "Varenna", "Molteni&C", "Dada", "Rimadesio"]
+  },
+  {
+    title: "Sofas & Armchairs",
+    brands: ["Minotti", "B&B Italia", "Flexform", "Cassina", "Edra", "Baxter"]
+  },
+  {
+    title: "Lighting",
+    brands: ["Flos", "Artemide", "Foscarini", "Occhio", "Davide Groppi", "Vibia"]
+  },
+  {
+    title: "Accessories & Outdoor",
+    brands: ["Kartell", "Vitra", "Knoll", "Gervasoni", "Roda", "Paola Lenti"]
+  }
+];
+
 const Brands = () => {
   return (
     <div className="w-full bg-white text-[#1a1a1a] font-jost pt-24 md:pt-32">
@@ -76,8 +95,45 @@ const Brands = () => {
         </div>
       </section>
 
+      {/* Made in Italy Section */}
+      <section className="w-full py-20 bg-white border-b border-gray-100">
+        <div className="container mx-auto px-6 md:px-12 lg:px-20 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+           <div className="h-[400px] md:h-[500px] bg-gray-100 overflow-hidden relative rounded-sm">
+             <img src="https://images.unsplash.com/photo-1556228453-efd6c1ff04f6?q=80&w=1000" alt="Made in Italy Detail" className="w-full h-full object-cover hover:scale-105 transition-transform duration-1000" />
+           </div>
+           <motion.div
+             initial={{ opacity: 0, x: 30 }}
+             whileInView={{ opacity: 1, x: 0 }}
+             viewport={{ once: true }}
+             transition={{ duration: 0.8 }}
+           >
+             <span className="text-[#00b7cd] uppercase tracking-[0.2em] text-xs font-bold mb-4 block">Quality First</span>
+             <h3 className="text-3xl md:text-5xl font-bold mb-6">L'Eccellenza del Made in Italy</h3>
+             <p className="text-gray-500 text-lg font-light leading-relaxed mb-8">
+               Il design italiano è sinonimo di eleganza, artigianalità e innovazione in tutto il mondo. 
+               Collaboriamo storicamente con le aziende che hanno fatto la storia del design, 
+               garantendo ai nostri clienti prodotti che non sono solo oggetti, ma investimenti destinati a durare nel tempo.
+             </p>
+             <ul className="space-y-4">
+               <li className="flex items-center gap-4">
+                 <span className="w-8 h-[1px] bg-[#00b7cd]"></span>
+                 <span className="text-lg font-medium">Materiali pregiati e sostenibili</span>
+               </li>
+               <li className="flex items-center gap-4">
+                 <span className="w-8 h-[1px] bg-[#00b7cd]"></span>
+                 <span className="text-lg font-medium">Lavorazioni artigianali certificate</span>
+               </li>
+               <li className="flex items-center gap-4">
+                 <span className="w-8 h-[1px] bg-[#00b7cd]"></span>
+                 <span className="text-lg font-medium">Design iconico e senza tempo</span>
+               </li>
+             </ul>
+           </motion.div>
+        </div>
+      </section>
+
       {/* Filosofia Aziendale (Testo da Arredorama.it) */}
-      <section className="container mx-auto px-6 md:px-12 lg:px-20 pb-24">
+      <section className="container mx-auto px-6 md:px-12 lg:px-20 pb-24 pt-24">
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -100,6 +156,37 @@ const Brands = () => {
               </p>
             </div>
         </motion.div>
+      </section>
+
+      {/* Brand Categories List */}
+      <section className="bg-[#1a1a1a] text-white py-24">
+         <div className="container mx-auto px-6 md:px-12 lg:px-20">
+            <div className="text-center mb-16">
+               <h2 className="text-3xl md:text-4xl font-bold mb-4">I Nostri Settori</h2>
+               <p className="text-gray-400">Una selezione completa per ogni ambiente della casa</p>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
+               {BRAND_CATEGORIES.map((cat, idx) => (
+                 <motion.div 
+                   key={idx}
+                   initial={{ opacity: 0, y: 20 }}
+                   whileInView={{ opacity: 1, y: 0 }}
+                   viewport={{ once: true }}
+                   transition={{ delay: idx * 0.1, duration: 0.6 }}
+                   className="border-t border-gray-700 pt-8"
+                 >
+                   <h4 className="text-xl font-bold mb-6 text-[#00b7cd]">{cat.title}</h4>
+                   <ul className="space-y-3">
+                     {cat.brands.map((brand, bIdx) => (
+                       <li key={bIdx} className="text-gray-300 font-light hover:text-white transition-colors cursor-default">
+                         {brand}
+                       </li>
+                     ))}
+                   </ul>
+                 </motion.div>
+               ))}
+            </div>
+         </div>
       </section>
 
       {/* CTA Footer */}

@@ -195,6 +195,51 @@ const ServicesScrollSection = () => {
   );
 };
 
+const ContactPopup = () => {
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    // Mostra il popup dopo 2.5 secondi
+    const showTimer = setTimeout(() => setIsVisible(true), 2500);
+    
+    // Nascondi il popup dopo 15 secondi (12.5 secondi di visibilità effettiva)
+    const hideTimer = setTimeout(() => setIsVisible(false), 15000);
+
+    return () => {
+      clearTimeout(showTimer);
+      clearTimeout(hideTimer);
+    };
+  }, []);
+
+  return (
+    <AnimatePresence>
+      {isVisible && (
+        <motion.div
+          initial={{ opacity: 0, y: 100, scale: 0.8 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          exit={{ opacity: 0, y: 100, scale: 0.8 }}
+          transition={{ duration: 0.6, type: "spring", stiffness: 100 }}
+          className="fixed bottom-8 right-8 z-[80] cursor-pointer"
+        >
+          <Link to="/contact" className="block group">
+            <div className="bg-white p-6 shadow-2xl rounded-sm border-l-4 border-[#00b7cd] flex items-center gap-5 hover:-translate-y-1 transition-transform duration-300">
+              <div className="bg-gray-50 p-4 rounded-full group-hover:bg-[#00b7cd] group-hover:text-white transition-colors duration-300">
+                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-8 h-8">
+                   <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
+                 </svg>
+              </div>
+              <div className="pr-4">
+                <p className="text-xs uppercase tracking-widest font-bold text-gray-400 mb-1">Hai un progetto?</p>
+                <p className="text-lg font-bold text-black leading-tight">Richiedi una consulenza</p>
+              </div>
+            </div>
+          </Link>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+};
+
 // --- COMPONENTE SLIDER PROGETTI ---
 
 const ProjectSlider = ({ projects }) => {
@@ -417,6 +462,9 @@ const Home = () => {
         <h2 className="text-3xl md:text-5xl font-semibold mb-8 leading-tight">Pronto a trasformare <br/> il tuo spazio?</h2>
         <Link to="/contact"><button className="bg-black text-white px-12 py-5 uppercase text-xs font-bold tracking-[0.2em] hover:bg-[#00b7cd] transition-colors duration-300">Inizia un Progetto</button></Link>
       </section>
+
+      {/* Popup Contatti */}
+      <ContactPopup />
     </div>
   );
 };
